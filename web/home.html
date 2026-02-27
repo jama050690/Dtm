@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mening Sahifam - DTM Test Platform</title>
+    <meta name="description" content="DTM Test Platform - Foydalanuvchi sahifasi">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css">
+    <style>
+        .home-header {
+            padding: 20px 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .home-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .home-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .coin-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            color: #78350f;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .coin-display img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .home-content {
+            padding: 60px 0;
+        }
+
+        .welcome-banner {
+            background: var(--gradient-hero);
+            padding: 40px;
+            border-radius: var(--radius-xl);
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .welcome-banner h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: var(--card-background);
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-card.active {
+            border: 2px solid var(--primary);
+        }
+
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border-radius: var(--radius-lg);
+        }
+
+        .service-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Test Section */
+        .test-section {
+            display: none;
+            background: var(--card-background);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .test-section.active {
+            display: block;
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .test-info {
+            display: flex;
+            gap: 24px;
+        }
+
+        .test-info span {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .question-card {
+            margin-bottom: 24px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 15px;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--success-color);
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .option.wrong {
+            border-color: var(--danger-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .test-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-full);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            transition: width 0.3s ease;
+        }
+
+        /* Results Section */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .result-card {
+            background: var(--card-background);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .result-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .result-score {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .result-score.excellent {
+            color: var(--success-color);
+        }
+
+        .result-score.good {
+            color: var(--primary);
+        }
+
+        .result-score.needs-work {
+            color: var(--accent);
+        }
+
+        .result-date {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .result-details {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Analytics */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-background);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Progress Chart */
+        .chart-container {
+            background: var(--card-background);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-top: 24px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 150px;
+            padding-top: 20px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--gradient-primary);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            transition: height 0.3s ease;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-score {
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Home Header -->
+    <header class="home-header">
+        <div class="home-container">
+            <nav class="home-nav">
+                <a href="/" class="logo">
+                    <img src="/logo.svg" alt="DTM Test" class="logo-img">
+                    <span class="logo-text">DTM Test</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="/home.html">Mening Sahifam</a></li>
+                    <li><a href="/">Bosh sahifa</a></li>
+                    <li>
+                        <button class="btn-secondary" onclick="toggleTheme()" style="padding: 8px 12px;"
+                            title="Theme toggle">
+                            <svg id="sunIcon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" style="display: none;">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <path
+                                    d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
+                                </path>
+                            </svg>
+                            <svg id="moonIcon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </button>
+                    </li>
+                    <li>
+                        <div class="coin-display">
+                            <img src="/coin.svg" alt="Coins">
+                            <span id="headerCoins">0</span>
+                        </div>
+                    </li>
+                    <li>
+                        <button class="btn-secondary" onclick="showProfile()" style="padding: 8px 16px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Profil
+                        </button>
+                    </li>
+                    <li id="userMenu">
+                        <div class="user-menu">
+                            <span class="user-name" id="userName">User</span>
+                            <button class="btn-logout" onclick="DTM.logout()">Chiqish</button>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Home Content -->
+    <main class="home-content">
+        <div class="home-container">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <h1>Xush kelibsiz, <span id="welcomeName">Foydalanuvchi</span>!</h1>
+                <p>DTM Test Platform orqali bilimlaringizni sinab ko'ring va rivojlaning.</p>
+            </div>
+
+            <!-- Profile Section -->
+            <section class="section" id="profileSection" style="display: none;">
+                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;">←
+                    Orqaga</button>
+                <h2 class="section-title">Mening Profilim</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div
+                                style="width: 100px; height: 100px; border-radius: 50%; background: var(--gradient-primary); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: white;">
+                                <img src="/icon-user.svg" alt="User" style="width: 50px; height: 50px;">
+                            </div>
+                            <h3 id="profileName" style="font-size: 24px; margin-bottom: 8px;">Foydalanuvchi</h3>
+                            <p id="profileEmail" style="color: var(--text-secondary);">email@example.com</p>
+                        </div>
+                    </div>
+                    <div class="result-card">
+                        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-primary);">Coinlar</h3>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <img src="/coin.svg" alt="Coins" style="width: 40px; height: 40px;">
+                            <span id="profileCoins" style="font-size: 32px; font-weight: 700; color: #f59e0b;">0</span>
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Test topshirib coin to'plang!</p>
+                    </div>
+                    <div class="result-card">
+                        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-primary);">Statistika</h3>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <span style="color: var(--text-secondary);">Jami testlar:</span>
+                            <span id="profileTotalTests" style="font-weight: 600;">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <span style="color: var(--text-secondary);">To'g'ri javoblar:</span>
+                            <span id="profileCorrectAnswers"
+                                style="font-weight: 600; color: var(--success-color);">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-secondary);">Umumiy ball:</span>
+                            <span id="profileTotalScore" style="font-weight: 600;">0</span>
+                        </div>
+                    </div>
+                    <div class="result-card">
+                        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-primary);">So'nggi
+                            Faoliyat</h3>
+                        <div id="profileRecentActivity" style="color: var(--text-secondary);">
+                            <p>Hozircha faoliyat yo'q</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Xizmatlar Section -->
+            <section class="section" id="servicesSection">
+                <h2 class="section-title">Xizmatlar</h2>
+                <div class="services-grid" id="subjectsGrid">
+                    <!-- Subjects will be loaded dynamically -->
+                    <div class="service-card" onclick="selectSubject(1, 'Matematika')">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
+                            <img src="/icon-math.svg" alt="Matematika" style="width: 32px; height: 32px;">
+                        </div>
+                        <h3>Matematika</h3>
+                        <p>Algebra, geometriya va boshqa masalalar</p>
+                        <button class="btn-primary" style="margin-top: 12px;">Boshlash</button>
+                    </div>
+
+                    <div class="service-card" onclick="selectSubject(2, 'Fizika')">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
+                            <img src="/icon-physics.svg" alt="Fizika" style="width: 32px; height: 32px;">
+                        </div>
+                        <h3>Fizika</h3>
+                        <p>Mexanika, elektr va optika</p>
+                        <button class="btn-primary" style="margin-top: 12px;">Boshlash</button>
+                    </div>
+
+                    <div class="service-card" onclick="selectSubject(3, 'Kimyo')">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #22c55e, #4ade80);">
+                            <img src="/icon-chemistry.svg" alt="Kimyo" style="width: 32px; height: 32px;">
+                        </div>
+                        <h3>Kimyo</h3>
+                        <p>Organik va notorganik kimyo</p>
+                        <button class="btn-primary" style="margin-top: 12px;">Boshlash</button>
+                    </div>
+
+                    <div class="service-card" onclick="selectSubject(4, 'Biologiya')">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #ec4899, #f472b6);">
+                            <img src="/icon-biology.svg" alt="Biologiya" style="width: 32px; height: 32px;">
+                        </div>
+                        <h3>Biologiya</h3>
+                        <p>Hayvonot, o'simlik va inson anatomiyasi</p>
+                        <button class="btn-primary" style="margin-top: 12px;">Boshlash</button>
+                    </div>
+
+                    <div class="service-card" onclick="selectSubject(5, 'Tarix')">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                            <img src="/icon-history.svg" alt="Tarix" style="width: 32px; height: 32px;">
+                        </div>
+                        <h3>Tarix</h3>
+                        <p>Jahon va O'zbekiston tarixi</p>
+                        <button class="btn-primary" style="margin-top: 12px;">Boshlash</button>
+                    </div>
+
+                    <div class="service-card" onclick="selectSubject(6, 'Geografiya')">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+                            <img src="/icon-geography.svg" alt="Geografiya" style="width: 32px; height: 32px;">
+                        </div>
+                        <h3>Geografiya</h3>
+                        <p>Davlatlar, qit'alar va iqlim</p>
+                        <button class="btn-primary" style="margin-top: 12px;">Boshlash</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Test Section -->
+            <section class="section test-section" id="testSection">
+                <div class="test-header">
+                    <h2 class="section-title" style="margin-bottom: 0;">Test - <span id="selectedSubjectName">Fan</span>
+                    </h2>
+                    <div class="test-info">
+                        <span>Savol: <span id="currentQuestion">1</span>/<span id="totalQuestions">5</span></span>
+                        <span>Vaqt: <span id="timer">05:00</span></span>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                </div>
+
+                <div class="question-card" id="questionCard">
+                    <p class="question-text" id="questionText">1. Quyidagilardan qaysi biri dasturlash tili hisoblanadi?
+                    </p>
+                    <div class="options" id="options">
+                        <div class="option" onclick="selectOption(0)">Python</div>
+                        <div class="option" onclick="selectOption(1)">Microsoft Word</div>
+                        <div class="option" onclick="selectOption(2)">Google Chrome</div>
+                        <div class="option" onclick="selectOption(3)">Adobe Photoshop</div>
+                    </div>
+                </div>
+
+                <div class="test-navigation">
+                    <button class="btn-secondary" onclick="prevQuestion()" id="prevBtn">Oldingi</button>
+                    <button class="btn-primary" onclick="nextQuestion()" id="nextBtn">Keyingi</button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="section" id="resultsSection" style="display: none;">
+                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;">←
+                    Orqaga</button>
+                <h2 class="section-title">Mening Natijalarim</h2>
+                <div class="results-grid" id="resultsGrid">
+                    <div class="result-card">
+                        <h3>Matematika</h3>
+                        <div class="result-score excellent">85%</div>
+                        <div class="result-date">2026-02-20</div>
+                        <div class="result-details">17/20 to'g'ri</div>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Fizika</h3>
+                        <div class="result-score good">72%</div>
+                        <div class="result-date">2026-02-18</div>
+                        <div class="result-details">14/20 to'g'ri</div>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Kimyo</h3>
+                        <div class="result-score needs-work">58%</div>
+                        <div class="result-date">2026-02-15</div>
+                        <div class="result-details">12/20 to'g'ri</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section class="section" id="analyticsSection" style="display: none;">
+                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;">←
+                    Orqaga</button>
+                <h2 class="section-title">Analitika</h2>
+                <div class="analytics-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">15</div>
+                        <div class="stat-label">Jami testlar</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value">72%</div>
+                        <div class="stat-label">O'rtacha natija</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Fanlar</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value">2.5h</div>
+                        <div class="stat-label">Jami vaqt</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="section" id="progressSection" style="display: none;">
+                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;">←
+                    Orqaga</button>
+                <h2 class="section-title">Mening Progressim</h2>
+                <div class="chart-container">
+                    <h3 class="chart-title">Natijalar dinamikasi</h3>
+                    <div class="chart">
+                        <div class="chart-bar" style="height: 60%;"></div>
+                        <div class="chart-bar" style="height: 75%;"></div>
+                        <div class="chart-bar" style="height: 65%;"></div>
+                        <div class="chart-bar" style="height: 80%;"></div>
+                        <div class="chart-bar" style="height: 72%;"></div>
+                        <div class="chart-bar" style="height: 85%;"></div>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--text-muted);">
+                        <span>1-h</span><span>2-h</span><span>3-h</span><span>4-h</span><span>5-h</span><span>6-h</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Result Modal -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <h2>Test yakunlandi!</h2>
+            <div class="modal-score" id="modalScore">80%</div>
+            <p id="modalMessage">Ajoyib natija!</p>
+            <button class="btn-primary" onclick="closeModal()" style="margin-top: 20px;">Yopish</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 DTM Test Platform. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+    <script>
+        // Test data
+        let testQuestions = [
+            {
+                question: "1. Quyidagilardan qaysi biri dasturlash tili hisoblanadi?",
+                options: ["Python", "Microsoft Word", "Google Chrome", "Adobe Photoshop"],
+                correct: 0
+            },
+            {
+                question: "2. HTML nima uchun ishlatiladi?",
+                options: ["Dasturlash", "Veb sahifa yaratish", "Rasmlarni tahrirlash", "Musiqa tinglash"],
+                correct: 1
+            },
+            {
+                question: "3. JavaScript nima?",
+                options: ["Ma'lumotlar bazasi", "Veb dasturlash tili", "Operatsion tizim", "Ofis dasturi"],
+                correct: 1
+            },
+            {
+                question: "4. CSS nima uchun ishlatiladi?",
+                options: ["Ma'lumotlar saqlash", "Veb sahifa stillari", "Fayllarni arxivlash", "Veb server"],
+                correct: 1
+            },
+            {
+                question: "5. Python dasturlash tili kim tomonidan yaratilgan?",
+                options: ["Bill Gates", "Steve Jobs", "Guido van Rossum", "Mark Zuckerberg"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedAnswers = [];
+        let timer;
+        let timeLeft = 300; // 5 minutes
+
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load saved theme
+            loadTheme();
+
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+
+            if (!token || !userStr) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const user = JSON.parse(userStr);
+            document.getElementById('userName').textContent = user.name || 'Foydalanuvchi';
+            document.getElementById('welcomeName').textContent = user.name || 'Foydalanuvchi';
+
+            // Load user data including coins
+            await loadUserData();
+        });
+
+        // Load user data
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const stats = await response.json();
+                document.getElementById('headerCoins').textContent = stats.coins || 0;
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Select subject and load tests
+        async function selectSubject(subjectId, subjectName) {
+            currentSubjectId = subjectId;
+            document.getElementById('selectedSubjectName').textContent = subjectName;
+
+            try {
+                const response = await fetch(`/api/tests/${subjectId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                testQuestions = await response.json();
+
+                if (testQuestions.length > 0) {
+                    showSection('test');
+                    startTest();
+                } else {
+                    alert('Bu fanda hali testlar yo\'q');
+                }
+            } catch (error) {
+                console.error('Error loading tests:', error);
+                alert('Testlarni yuklashda xatolik');
+            }
+        }
+
+        // Show section
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('servicesSection').style.display = 'none';
+            document.getElementById('testSection').classList.remove('active');
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('analyticsSection').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('profileSection').style.display = 'none';
+
+            // Show selected section
+            switch (section) {
+                case 'services':
+                    document.getElementById('servicesSection').style.display = 'block';
+                    break;
+                case 'test':
+                    document.getElementById('testSection').classList.add('active');
+                    startTest();
+                    break;
+                case 'results':
+                    document.getElementById('resultsSection').style.display = 'block';
+                    break;
+                case 'analytics':
+                    document.getElementById('analyticsSection').style.display = 'block';
+                    break;
+                case 'progress':
+                    document.getElementById('progressSection').style.display = 'block';
+                    break;
+                case 'profile':
+                    document.getElementById('profileSection').style.display = 'block';
+                    loadProfileData();
+                    break;
+            }
+        }
+
+        // Show profile
+        function showProfile() {
+            showSection('profile');
+        }
+
+        // Load profile data
+        async function loadProfileData() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                // Get user data
+                const userRes = await fetch('/api/auth/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const user = await userRes.json();
+
+                document.getElementById('profileName').textContent = user.name || 'Foydalanuvchi';
+                const profileEmail = document.getElementById('profileEmail');
+                if (profileEmail) profileEmail.style.display = 'none';
+                document.getElementById('profileCoins').textContent = user.coins || 0;
+
+                // Get stats
+                const statsRes = await fetch('/api/stats', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const stats = await statsRes.json();
+
+                document.getElementById('profileTotalTests').textContent = stats.totalTests || 0;
+                document.getElementById('profileCorrectAnswers').textContent = stats.correctAnswers || 0;
+                document.getElementById('profileTotalScore').textContent = stats.totalScore || 0;
+
+                // Get recent results
+                const resultsRes = await fetch('/api/results', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const results = await resultsRes.json();
+
+                const recentDiv = document.getElementById('profileRecentActivity');
+                if (results && results.length > 0) {
+                    recentDiv.innerHTML = results.slice(0, 3).map(r => `
+                        <div style="padding: 12px; background: var(--bg-secondary); border-radius: 8px; margin-bottom: 8px;">
+                            <div style="font-weight: 600;">${r.subjectName}</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                ${r.score}/${r.totalQuestions} - ${new Date(r.date).toLocaleDateString('uz-UZ')}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    recentDiv.innerHTML = '<p>Hozircha faoliyat yo\'q</p>';
+                }
+            } catch (err) {
+                console.error('Profile load error:', err);
+            }
+        }
+
+        // Start test
+        function startTest() {
+            currentQuestionIndex = 0;
+            selectedAnswers = new Array(testQuestions.length).fill(-1);
+            timeLeft = 300;
+
+            document.getElementById('totalQuestions').textContent = testQuestions.length;
+            showQuestion();
+            startTimer();
+        }
+
+        // Show current question
+        function showQuestion() {
+            const q = testQuestions[currentQuestionIndex];
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            // Build options from API response (A, B, C, D properties)
+            const optionKeys = ['A', 'B', 'C', 'D'];
+            optionKeys.forEach((key, i) => {
+                if (q[key]) {
+                    const div = document.createElement('div');
+                    div.className = 'option';
+                    if (selectedAnswers[currentQuestionIndex] === i) {
+                        div.classList.add('selected');
+                    }
+                    div.textContent = q[key];
+                    div.onclick = () => selectOption(i);
+                    optionsDiv.appendChild(div);
+                }
+            });
+
+            // Update progress
+            const progress = ((currentQuestionIndex + 1) / testQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update buttons
+            document.getElementById('prevBtn').style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').textContent = currentQuestionIndex === testQuestions.length - 1 ? 'Yakunlash' : 'Keyingi';
+        }
+
+        // Select option
+        function selectOption(index) {
+            selectedAnswers[currentQuestionIndex] = index;
+
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                if (i === index) {
+                    opt.classList.add('selected');
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+        }
+
+        // Previous question
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        // Next question
+        function nextQuestion() {
+            if (currentQuestionIndex < testQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        // Start timer
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent =
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        // Finish test
+        async function finishTest() {
+            clearInterval(timer);
+
+            let correct = 0;
+            testQuestions.forEach((q, i) => {
+                // Convert letter to index: A=0, B=1, C=2, D=3
+                const correctIndex = q.correct.charCodeAt(0) - 65; // 'A' = 65
+                if (selectedAnswers[i] === correctIndex) {
+                    correct++;
+                }
+            });
+
+            const score = Math.round((correct / testQuestions.length) * 100);
+
+            // Save result to API
+            try {
+                const response = await fetch('/api/results', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        subjectId: currentSubjectId,
+                        score: correct,
+                        total: testQuestions.length,
+                        answers: selectedAnswers
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Update coins display
+                    document.getElementById('headerCoins').textContent = data.totalCoins;
+
+                    // Show coins earned in modal
+                    const coinsEarned = data.coinsEarned || 0;
+                    document.getElementById('modalScore').textContent = score + '% +' + coinsEarned + ' 🪙';
+                } else {
+                    document.getElementById('modalScore').textContent = score + '%';
+                }
+            } catch (error) {
+                console.error('Error saving result:', error);
+                document.getElementById('modalScore').textContent = score + '%';
+            }
+
+            if (score >= 80) {
+                document.getElementById('modalMessage').textContent = 'Ajoyib natija! Davom eting!';
+            } else if (score >= 60) {
+                document.getElementById('modalMessage').textContent = 'Yaxshi natija! Ko\'proq mashq qiling.';
+            } else {
+                document.getElementById('modalMessage').textContent = 'Yanada ko\'proq o\'rganishingiz kerak.';
+            }
+
+            document.getElementById('resultModal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('resultModal').classList.remove('active');
+            showSection('services');
+        }
+
+        // Toggle theme (dark/light mode)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (sunIcon) sunIcon.style.display = 'block';
+                if (moonIcon) moonIcon.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+
+</html>

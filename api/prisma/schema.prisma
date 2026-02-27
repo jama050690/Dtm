@@ -1,0 +1,297 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  TRAVELER
+  SENDER
+  BOTH
+}
+
+enum ContactType {
+  PHONE
+  TELEGRAM
+  WHATSAPP
+}
+
+enum Currency {
+  USD
+  UZS
+}
+
+enum TripStatus {
+  ACTIVE
+  INACTIVE
+  COMPLETED
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum NotificationType {
+  NEW_REQUEST
+  REQUEST_ACCEPTED
+  REQUEST_REJECTED
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  firstName     String   @map("first_name")
+  lastName      String   @map("last_name")
+  phone         String?
+  city          String?
+  avatarUrl     String?  @map("avatar_url")
+  role          Role     @default(SENDER)
+  rating        Float    @default(0)
+  ratingCount   Int      @default(0) @map("rating_count")
+  isVerified    Boolean  @default(false) @map("is_verified")
+  isBlocked     Boolean  @default(false) @map("is_blocked")
+  isAdmin       Boolean  @default(false) @map("is_admin")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Email verification
+  verifyToken       String?   @map("verify_token")
+  verifyTokenExpiry DateTime? @map("verify_token_expiry")
+
+  // Password reset
+  resetToken        String?   @map("reset_token")
+  resetTokenExpiry  DateTime? @map("reset_token_expiry")
+
+  // Refresh token
+  refreshToken      String?   @map("refresh_token")
+
+  // Telegram integration
+  telegramId        BigInt?   @unique @map("telegram_id")
+  telegramUsername  String?   @map("telegram_username")
+  telegramPhotoUrl String?   @map("telegram_photo_url")
+
+  // Relations
+  trips             Trip[]
+  sentRequests      Request[]   @relation("SenderRequests")
+  sentMessages      Message[]   @relation("MessageSender")
+  chatsAsUser1      Chat[]      @relation("ChatUser1")
+  chatsAsUser2      Chat[]      @relation("ChatUser2")
+  reviewsGiven      Review[]    @relation("Reviewer")
+  reviewsReceived   Review[]    @relation("Reviewed")
+  notifications     Notification[]
+  kycVerification   KycVerification?
+  testResults       TestResult[]
+
+  @@map("users")
+}
+
+model Subject {
+  id          Int            @id @default(autoincrement())
+  directionId Int            @default(5) @map("direction_id")
+  name        String         @unique
+  description String?
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  direction     Direction      @relation(fields: [directionId], references: [id], onDelete: Cascade)
+  testQuestions TestQuestion[]
+  testResults   TestResult[]
+
+  @@map("subjects")
+}
+
+model Direction {
+  id          Int       @id
+  name        String    @unique
+  description String?
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  subjects Subject[]
+
+  @@map("directions")
+}
+
+model TestQuestion {
+  id        Int      @id @default(autoincrement())
+  subjectId Int      @map("subject_id")
+  question  String
+  optionA   String   @map("option_a")
+  optionB   String   @map("option_b")
+  optionC   String   @map("option_c")
+  optionD   String   @map("option_d")
+  correct   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@map("test_questions")
+}
+
+model TestResult {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  subjectId      Int      @map("subject_id")
+  score          Int
+  totalQuestions Int      @map("total_questions")
+  answers        Json?
+  coinsEarned    Int      @default(0) @map("coins_earned")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@map("test_results")
+}
+
+model Trip {
+  id              String     @id @default(uuid())
+  userId          String     @map("user_id")
+  fromCity        String     @map("from_city")
+  fromCountry     String     @map("from_country")
+  toCity          String     @map("to_city")
+  toCountry       String     @map("to_country")
+  toAirport       String?    @map("to_airport")
+  destinationCity String?    @map("destination_city")
+  departureDate   DateTime   @map("departure_date")
+  departureTime   String?    @map("departure_time")
+  arrivalDate     DateTime?  @map("arrival_date")
+  arrivalTime     String?    @map("arrival_time")
+  maxWeightKg     Float      @map("max_weight_kg")
+  availableWeightKg Float    @map("available_weight_kg")
+  acceptedItems   String[]   @map("accepted_items")
+  pricePerKg      Float      @map("price_per_kg")
+  currency        Currency   @default(USD)
+  description     String?
+  contactType     ContactType @map("contact_type")
+  contactValue    String     @map("contact_value")
+  status          TripStatus @default(ACTIVE)
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  requests        Request[]
+  chats           Chat[]
+  reviews         Review[]
+
+  @@map("trips")
+}
+
+model Request {
+  id              String        @id @default(uuid())
+  tripId          String        @map("trip_id")
+  senderId        String        @map("sender_id")
+  itemDescription String        @map("item_description")
+  weightKg        Float         @map("weight_kg")
+  message         String?
+  status          RequestStatus @default(PENDING)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  trip            Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  sender          User          @relation("SenderRequests", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@map("requests")
+}
+
+model Chat {
+  id            String    @id @default(uuid())
+  user1Id       String    @map("user1_id")
+  user2Id       String    @map("user2_id")
+  tripId        String    @map("trip_id")
+  lastMessageAt DateTime? @map("last_message_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  user1         User      @relation("ChatUser1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2         User      @relation("ChatUser2", fields: [user2Id], references: [id], onDelete: Cascade)
+  trip          Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  messages      Message[]
+
+  @@unique([user1Id, user2Id, tripId])
+  @@map("chats")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String   @map("chat_id")
+  senderId  String   @map("sender_id")
+  text      String
+  imageUrl  String?  @map("image_url")
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender    User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  reviewerId String   @map("reviewer_id")
+  reviewedId String   @map("reviewed_id")
+  tripId     String   @map("trip_id")
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  reviewer   User     @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewed   User     @relation("Reviewed", fields: [reviewedId], references: [id], onDelete: Cascade)
+  trip       Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewerId, tripId])
+  @@map("reviews")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String           @map("user_id")
+  type      NotificationType
+  title     String
+  message   String
+  requestId String?          @map("request_id")
+  isRead    Boolean          @default(false) @map("is_read")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model KycVerification {
+  id               String             @id @default(uuid())
+  userId           String             @unique @map("user_id")
+  passportNumber   String?            @map("passport_number")
+  passportImageUrl String             @map("passport_image_url")
+  selfieImageUrl   String             @map("selfie_image_url")
+  status           VerificationStatus @default(PENDING)
+  rejectionReason  String?            @map("rejection_reason")
+  submittedAt      DateTime           @default(now()) @map("submitted_at")
+  reviewedAt       DateTime?          @map("reviewed_at")
+  reviewedBy       String?            @map("reviewed_by")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("kyc_verifications")
+}
