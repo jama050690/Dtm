@@ -1036,7 +1036,7 @@
         </div>
     </main>
 
-    <!-- Result Modal -->
+    <!-- Result Modal (eski - oddiy modal) -->
     <div class="modal" id="resultModal">
         <div class="modal-content">
             <h2 data-i18n="home.test_finished">Test yakunlandi!</h2>
@@ -1044,6 +1044,74 @@
             <p id="modalMessage">Ajoyib natija!</p>
             <button class="btn-primary" onclick="closeModal()" style="margin-top: 20px;"
                 data-i18n="common.close">Yopish</button>
+        </div>
+    </div>
+
+    <!-- DTM Natija Sahifasi -->
+    <div id="dtmResultPage" style="display: none;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; gap: 20px; flex-wrap: wrap;">
+            <!-- Chap tomon: Natija jadvallari -->
+            <div style="flex: 1; min-width: 300px;">
+                <button class="btn-primary" onclick="closeDtmResult()" style="width: 100%; margin-bottom: 20px; padding: 12px; font-size: 16px;">
+                    &larr; Imtihon sahifasi
+                </button>
+
+                <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; background: #fff; margin-bottom: 20px;">
+                    <h2 style="text-align: center; margin-bottom: 20px; font-size: 20px;">DTM online test topshirish 2026</h2>
+
+                    <!-- Ball jadvali -->
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <thead>
+                            <tr style="background: #f5f5f5;">
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Tarix</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Chet tili</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Majburiy fanlar</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Jami</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="dtmFan1Correct" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmFan2Correct" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmMajburiyCorrect" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmJamiCorrect" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td id="dtmFan1Ball" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmFan2Ball" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmMajburiyBall" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmJamiBall" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Ishtirokchi jadvali -->
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f5f5f5;">
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Ishtirokchi</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Natija</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Sana</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Vaqt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="dtmUserName" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmPercentage" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmDate" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                                <td id="dtmDuration" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- O'ng tomon: Savol gridi -->
+            <div style="min-width: 280px;">
+                <div id="dtmQuestionGrid" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1769,46 +1837,44 @@
         async function finishTest() {
             clearInterval(timer);
 
-            let correct = 0;
-            testQuestions.forEach((q, i) => {
-                const correctIndex = q.correct.charCodeAt(0) - 65;
-                if (selectedAnswers[i] === correctIndex) {
-                    correct++;
-                }
-            });
+            // Sarflangan vaqtni hisoblash
+            const totalTime = examQuestionsFlat.length > 0 ? 5400 : 300;
+            const duration = totalTime - timeLeft;
 
-            const score = Math.round((correct / testQuestions.length) * 100);
-
-            // Save result to API
+            // DTM endpoint ga yuborish
             try {
-                const response = await fetch(apiPath('/api/results'), {
+                const response = await fetch(apiPath('/api/dtm-test/submit'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     },
                     body: JSON.stringify({
-                        subjectId: currentSubjectId,
-                        score: correct,
-                        total: testQuestions.length,
-                        answers: selectedAnswers
+                        answers: selectedAnswers,
+                        duration: duration
                     })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('headerCoins').textContent = data.totalCoins;
-                    const coinsEarned = data.coinsEarned || 0;
-                    document.getElementById('modalScore').textContent = score + '% +' + coinsEarned + ' 🪙';
-                } else {
-                    document.getElementById('modalScore').textContent = score + '%';
+                    showDtmResult(data);
+                    return;
                 }
             } catch (error) {
-                console.error('Error saving result:', error);
-                document.getElementById('modalScore').textContent = score + '%';
+                console.error('DTM submit error:', error);
             }
 
+            // Fallback: eski usul
+            let correct = 0;
+            testQuestions.forEach((q, i) => {
+                const correctIndex = q.correct ? q.correct.charCodeAt(0) - 65 : -1;
+                if (selectedAnswers[i] === correctIndex) {
+                    correct++;
+                }
+            });
+            const score = Math.round((correct / testQuestions.length) * 100);
+            document.getElementById('modalScore').textContent = score + '%';
             if (score >= 80) {
                 document.getElementById('modalMessage').textContent = DTM.t('home.modal_excellent');
             } else if (score >= 60) {
@@ -1816,11 +1882,62 @@
             } else {
                 document.getElementById('modalMessage').textContent = DTM.t('home.modal_need_work');
             }
-
             document.getElementById('resultModal').classList.add('active');
         }
 
-        // Close modal
+        // DTM natija sahifasini ko'rsatish
+        function showDtmResult(data) {
+            // Ball jadvali
+            document.getElementById('dtmFan1Correct').textContent = data.fan1.correct;
+            document.getElementById('dtmFan2Correct').textContent = data.fan2.correct;
+            document.getElementById('dtmMajburiyCorrect').textContent = data.majburiy.correct;
+            document.getElementById('dtmJamiCorrect').textContent = data.jami.correct + ' ta';
+
+            document.getElementById('dtmFan1Ball').textContent = data.fan1.ball;
+            document.getElementById('dtmFan2Ball').textContent = data.fan2.ball;
+            document.getElementById('dtmMajburiyBall').textContent = data.majburiy.ball;
+            document.getElementById('dtmJamiBall').textContent = data.jami.ball + ' ball';
+
+            // Ishtirokchi jadvali
+            document.getElementById('dtmUserName').textContent = data.user.name;
+            document.getElementById('dtmPercentage').textContent = data.percentage + '%';
+            document.getElementById('dtmDate').textContent = data.date;
+            document.getElementById('dtmDuration').textContent = data.duration;
+
+            // Savol gridi (90 ta - yashil/qizil)
+            const grid = document.getElementById('dtmQuestionGrid');
+            let html = '';
+            for (let i = 0; i < data.questionResults.length; i++) {
+                const isCorrect = data.questionResults[i];
+                const bgColor = isCorrect ? '#c8e6c9' : '#ffcdd2';
+                const textColor = isCorrect ? '#2e7d32' : '#c62828';
+                html += `<div style="
+                    width: 36px; height: 36px;
+                    display: flex; align-items: center; justify-content: center;
+                    background: ${bgColor}; color: ${textColor};
+                    border-radius: 4px; font-size: 13px; font-weight: 600;
+                    cursor: default;
+                ">${i + 1}</div>`;
+            }
+            grid.innerHTML = html;
+
+            // Test sahifasini yashirish, natija sahifasini ko'rsatish
+            document.getElementById('testSection').style.display = 'none';
+            document.getElementById('dtmResultPage').style.display = 'block';
+
+            // Boshqa sectionlarni yashirish
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.querySelector('.sidebar')?.style.setProperty('display', 'none');
+        }
+
+        // DTM natija sahifasini yopish
+        function closeDtmResult() {
+            document.getElementById('dtmResultPage').style.display = 'none';
+            showSection('services');
+            document.querySelector('.sidebar')?.style.removeProperty('display');
+        }
+
+        // Close modal (eski modal uchun)
         function closeModal() {
             document.getElementById('resultModal').classList.remove('active');
             showSection('services');

@@ -1,0 +1,61 @@
+Matematika (DTM_10406)
+
+71. Kubning qirrasi 3 dm bo'lsa, hajmini (dm3) toping.
+A) 16
+B) 27
+C) 64
+D) 81
+
+72. Tenglamani yeching: 2(2x-3)-3(x+3)=0
+A) 3
+B) 15
+C) -15
+D) -3
+
+73. Hisoblang: (7 + 1/9) : 64/81 - 3
+A) 7
+B) 6
+C) 5
+D) 4
+
+74. Yangi qurilgan supermarketga sotish uchun 2 tonna shakar keltirildi. Birinchi kuni bu shakardan 320 kg, ikkinchi kuni esa 2,5 sentener sotildi. Supermarketda qancha (kg) shaker sotilmay qoldi?
+A) 1470
+B) 1430
+C) 1450
+D) 1380
+
+75. Ming so'mlik puldan nechtasi 1 mln so'mni tashkil qiladi?
+A) 1000
+B) 100
+C) 10000
+D) 10
+
+76. Tenglamani yeching: 4,6x - 9,4x = 4 - 5,8x
+A) 3,7
+B) 2,3
+C) 7,1
+D) 4
+
+77. Rasmdagi qopning og'irligi necha kilogrammga teng?
+A) 4
+B) 3
+C) 5
+D) 2
+
+78. Metall qotishmasi massasining o'rtacha 2/5 qismini temir tashkil qiladi. 70 kg metall qotishmasining o'rtacha necha kilogrammini temir tashkil qiladi?
+A) 30
+B) 24
+C) 28
+D) 35
+
+79. 8 <= x < 14 qo'sh tengsizlikni qanoatlantiruvchi sonlardan eng kattasini 2 marta oshiring.
+A) 28
+B) 26
+C) 13
+D) 14
+
+80. EKUB(18; 24) = ?
+A) 4
+B) 6
+C) 9
+D) 3

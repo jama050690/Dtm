@@ -1,5 +1,44 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "../lib/prisma.js";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+
+// DTM javoblarni txt fayldan o'qish
+function parseJavoblar(): Map<number, string> {
+  const answers = new Map<number, string>();
+  const possiblePaths = [
+    resolve(process.cwd(), "..", "tests", "ijtimoiy-fan", "javoblar.txt"),
+    resolve(process.cwd(), "tests", "ijtimoiy-fan", "javoblar.txt"),
+    resolve(process.cwd(), "..", "..", "tests", "ijtimoiy-fan", "javoblar.txt"),
+  ];
+
+  let content = "";
+  for (const p of possiblePaths) {
+    try {
+      content = readFileSync(p, "utf-8");
+      break;
+    } catch {
+      continue;
+    }
+  }
+
+  if (!content) return answers;
+
+  for (const line of content.split("\n")) {
+    const match = line.trim().match(/^(\d+)-([A-Da-d])$/);
+    if (match) {
+      answers.set(parseInt(match[1], 10), match[2].toUpperCase());
+    }
+  }
+  return answers;
+}
+
+// DTM ball tizimi
+const DTM_SCORING = {
+  fan1: 3.1,      // 1-fan: har bir to'g'ri javobga 3.1 ball
+  fan2: 2.1,      // 2-fan: har bir to'g'ri javobga 2.1 ball
+  majburiy: 1.1,  // majburiy fanlar: har bir to'g'ri javobga 1.1 ball
+};
 
 type Subject = {
   id: number;
@@ -112,76 +151,89 @@ const defaultSubjects: Subject[] = [
 const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
   Matematika: [
     {
-      question: "2x + 5 = 13 tenglamada x qiymatini toping",
-      A: "2",
-      B: "3",
-      C: "4",
-      D: "5",
-      correct: "C",
-    },
-    {
-      question: "9 ning kvadrat ildizi nechiga teng?",
-      A: "2",
-      B: "3",
-      C: "4",
-      D: "5",
-      correct: "B",
-    },
-  ],
-  Fizika: [
-    {
-      question: "SI tizimida kuch birligi qaysi?",
-      A: "Joul",
-      B: "Nyuton",
-      C: "Vatt",
-      D: "Paskal",
+      question: "Kubning qirrasi 3 dm bo'lsa, hajmini (dm3) toping.",
+      A: "16",
+      B: "27",
+      C: "64",
+      D: "81",
       correct: "B",
     },
     {
-      question: "Tok kuchi qanday belgilanadi?",
-      A: "I",
-      B: "U",
-      C: "R",
-      D: "P",
+      question: "Tenglamani yeching: 2(2x-3)-3(x+3)=0",
+      A: "3",
+      B: "15",
+      C: "-15",
+      D: "-3",
+      correct: "B",
+    },
+    {
+      question: "Hisoblang: (7 + 1/9) : 64/81 - 3",
+      A: "7",
+      B: "6",
+      C: "5",
+      D: "4",
       correct: "A",
     },
-  ],
-  Kimyo: [
     {
-      question: "Suvning kimyoviy formulasi qaysi?",
-      A: "CO2",
-      B: "O2",
-      C: "H2O",
-      D: "NaCl",
-      correct: "C",
+      question: "Yangi qurilgan supermarketga sotish uchun 2 tonna shakar keltirildi. Birinchi kuni bu shakardan 320 kg, ikkinchi kuni esa 2,5 sentener sotildi. Supermarketda qancha (kg) shakar sotilmay qoldi?",
+      A: "1470",
+      B: "1430",
+      C: "1450",
+      D: "1380",
+      correct: "B",
     },
     {
-      question: "Periodik jadvalni kim yaratgan?",
-      A: "Mendeleev",
-      B: "Faradey",
-      C: "Nyuton",
-      D: "Eynshteyn",
+      question: "Ming so'mlik puldan nechtasi 1 mln so'mni tashkil qiladi?",
+      A: "1000",
+      B: "100",
+      C: "10000",
+      D: "10",
       correct: "A",
     },
-  ],
-  Biologiya: [
     {
-      question: "Fotosintez asosan qaysi organellada sodir bo'ladi?",
-      A: "Yadro",
-      B: "Mitoxondriya",
-      C: "Xloroplast",
-      D: "Ribosoma",
+      question: "Tenglamani yeching: 4,6x - 9,4x = 4 - 5,8x",
+      A: "3,7",
+      B: "2,3",
+      C: "7,1",
+      D: "4",
+      correct: "D",
+    },
+    {
+      question: "Rasmdagi qopning og'irligi necha kilogrammga teng?",
+      A: "4",
+      B: "3",
+      C: "5",
+      D: "2",
       correct: "C",
     },
     {
-      question: "Inson organizmida kislorod tashuvchi oqsil qaysi?",
-      A: "Insulin",
-      B: "Gemoglobin",
-      C: "Kollagen",
-      D: "Keratin",
+      question: "Metall qotishmasi massasining o'rtacha 2/5 qismini temir tashkil qiladi. 70 kg metall qotishmasining o'rtacha necha kilogrammini temir tashkil qiladi?",
+      A: "30",
+      B: "24",
+      C: "28",
+      D: "35",
+      correct: "C",
+    },
+    {
+      question: "8 <= x < 14 qo'sh tengsizlikni qanoatlantiruvchi sonlardan eng kattasini 2 marta oshiring.",
+      A: "28",
+      B: "26",
+      C: "13",
+      D: "14",
+      correct: "B",
+    },
+    {
+      question: "EKUB(18; 24) = ?",
+      A: "4",
+      B: "6",
+      C: "9",
+      D: "3",
       correct: "B",
     },
   ],
+  Fizika: [],
+  Kimyo: [],
+  Biologiya: [],
   Tarix: [
     // 1-30: Asosiy tarix savollari
     {
@@ -190,7 +242,7 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
       B: "1869-1932-yillar",
       C: "1878-1931-yillar",
       D: "1874-1919-yillar",
-      correct: "A",
+      correct: "B",
     },
     {
       question: "Fors shohligi tomonidan Bobil zabt etilgan asrda yuz bergan voqeani aniqlang.",
@@ -198,7 +250,7 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
       B: "Apennin yarimorolida Etrusk shahar-davlatlari tashkil topgan",
       C: "Frada boshchiligidagi qo'zg'olon yuz bergan",
       D: "Afina o'z kuch-qudratining cho'qqisiga ko'tarilgan",
-      correct: "C",
+      correct: "A",
     },
     {
       question: "Afinada demokratiyaga o'tilganidan qancha vaqt o'tib, Rimda respublika tuzumi o'rnatildi?",
@@ -206,7 +258,7 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
       B: "102 yil",
       C: "75 yil",
       D: "85 yil",
-      correct: "A",
+      correct: "B",
     },
     {
       question: "Italiyaning Florensiya shahrida italiyalik olim Perondinoning \"Skifiyalik Tamerlanning ulug'vorligi\" asari (a) va Seveliyada mashhur Ispaniya elchisi Klavixoning \"Esdaliklari\" kitobi (b) nashrdan chiqqan yillarni belgilang.",
@@ -214,7 +266,7 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
       B: "a) 1558-yili, b) 1589-yili",
       C: "a) 1553-yili, b) 1582-yili",
       D: "a) 1551-yili, b) 1583-yili",
-      correct: "D",
+      correct: "A",
     },
     {
       question: "Quyidagilardan Xo'jand shahri bilan bog'liq to'g'ri ma'lumotlarni belgilang. 1) mo'g'ullar bosqini vaqtida Xo'jand 7 oy qamal qilingan; 2) 1137-yilda Qoraxitoylar Xo'jand shahri yaqinida qoraxoniylar eloqxoni Mahmudga qaqshatqich zarba berdi; 3) Temur Malik Xo'jand hokimi bo'lgan; 4) Chig'atoy Xo'jand shahrini o'ziga qarorgoh qilib olgan; 5) Xo'jand shahri Sirdaryo ikkiga ayrilgan yerda joylashgan",
@@ -238,7 +290,7 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
       B: "1-b, 2-d, 3-c, 4-a",
       C: "1-b, 2-c, 3-d, 4-a",
       D: "1-b, 2-a, 3-d, 4-c",
-      correct: "C",
+      correct: "A",
     },
     {
       question: "Quyidagi shaxslardan qaysi biri o'rta asrlarda Vizantiyada hukmronlik qilmagan?",
@@ -506,132 +558,335 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
       correct: "C",
     },
   ],
-  Huquq: [
-    {
-      question: "O'zbekiston Respublikasi Konstitutsiyasi qachon qabul qilingan?",
-      A: "1991-yil 1-sentyabr",
-      B: "1992-yil 8-dekabr",
-      C: "1993-yil 1-yanvar",
-      D: "1990-yil 20-iyun",
-      correct: "B",
-    },
-    {
-      question: "Qonun chiqaruvchi hokimiyatni kim amalga oshiradi?",
-      A: "Vazirlar Mahkamasi",
-      B: "Prezident",
-      C: "Oliy Majlis",
-      D: "Konstitutsiyaviy sud",
-      correct: "C",
-    },
-  ],
-  Geografiya: [
-    {
-      question: "O'zbekistonning poytaxti qaysi shahar?",
-      A: "Samarqand",
-      B: "Buxoro",
-      C: "Toshkent",
-      D: "Namangan",
-      correct: "C",
-    },
-    {
-      question: "Dunyodagi eng baland tog' cho'qqisi qaysi?",
-      A: "Elbrus",
-      B: "Everest",
-      C: "Kilimanjaro",
-      D: "Monblan",
-      correct: "B",
-    },
-  ],
+  Huquq: [],
+  Geografiya: [],
   "Ona tili va adabiyoti": [
     {
-      question: "Alisher Navoiy qaysi asrda yashagan?",
-      A: "XIII asr",
-      B: "XIV asr",
-      C: "XV asr",
-      D: "XVI asr",
+      question: "Men \"Registon\" bilan birgalikda albatta o'z maqsadimga yuqori natijalarga erishaman. Ushbu gap haqida noto'g'ri fikrni aniqlang?",
+      A: "Ushbu gapda metonomiya asosida ma'no ko'chish holati kuzatilgan",
+      B: "Ushbu gapda imloviy xatolik kuzatiladi",
+      C: "Tinish belgisi bilan bog'liq xatolik mavjud",
+      D: "Ushbu gap ifoda-maqsadiga ko'ra darak gap hisoblanadi",
       correct: "C",
     },
     {
-      question: "'Hamsa' asarining muallifi kim?",
-      A: "Bobur",
-      B: "Navoiy",
-      C: "Mashrab",
-      D: "Lutfiy",
+      question: "Ikki unli o'rtasida talaffuzda y undoshi orttirib aytilsa-da, lekin bu yozuvda aks etmaydigan so'zlar berilgan qatorni aniqlang.",
+      A: "Maorif, oid",
+      B: "Shoir, doim",
+      C: "Tarbiya, shoir",
+      D: "Ilm, tabiat",
+      correct: "A",
+    },
+    {
+      question: "Qaysi javobda chiziqcha bilan yozish qoidasi buzilgan?",
+      A: "5-sinf",
+      B: "siz-chi?",
+      C: "aka-uka",
+      D: "ertaga-yoq",
+      correct: "D",
+    },
+    {
+      question: "\"Hafsalasi pir bo'ldi\" iborasiga ma'nodosh ibora ishtirok etgan gapni aniqlang?",
+      A: "Og'ziga talqon solganday jim o'tirdi",
+      B: "Shu payt ko'cha darvoza taraqlab ochildi, tarvuzi qo'ltig'idan tushib Alijon kirib keldi",
+      C: "Sobir yulduzni benarvon uradiganlar sirasiga kiradi",
+      D: "Mehmon joyiga o'tirdi-yu, ammo ko'ngli joyiga tushmadi",
+      correct: "D",
+    },
+    {
+      question: "Qaysi gapda // shartli belgisi o'rnida tire (—) tinish belgisi tushirib qoldirilgan?",
+      A: "Tarixni o'rganishdan asosiy maqsad // milliy o'zligimizni chuqurroq anglash",
+      B: "Mening opam ham // talaba, bu yil oliygohga kirdilar",
+      C: "Bildi ota // foydasizdir kurashmoq",
+      D: "Ehtimol, sizda ham shunday hollar bo'lgandir // tun yarmidan og'ganda birdan uyg'onib ketasiz",
+      correct: "A",
+    },
+    {
+      question: "Ibora qo'llanmagan gapni aniqlang?",
+      A: "Tengqurlarim ichida yuzim yorug' bo'ldi",
+      B: "Tilga ixtiyorsiz – elga e'tiborsiz",
+      C: "Uni qo'lga oluvchi kishilarimiz nihoyatda pixini yorgan bo'lmog'i shart",
+      D: "Kishilikning dushmanlari yer bilan yakson bo'lur",
       correct: "B",
+    },
+    {
+      question: "\"e\" harfi qaysi so'zlarda \"i\" tovushiga monand aytiladi, lekin \"e\" yoziladi?",
+      A: "Material, ekran, ne'mat, teatr",
+      B: "Okean, kecha",
+      C: "Kecha, telefon, ekran, ne'mat",
+      D: "Material, teatr, okean",
+      correct: "A",
+    },
+    {
+      question: "Yana ular futbol haqida nazariy bilimlarga ega bo'lishimizni talab qiladilar. Ushbu gapdagi ko'makchining ma'no turini belgilang.",
+      A: "maqsad ma'nosi",
+      B: "yo'nalish ma'nosi",
+      C: "chegara ma'nosi",
+      D: "fikr mavzusi ma'nosi",
+      correct: "D",
+    },
+    {
+      question: "Qaysi gapda \"ma'lum vaqt, fursat uchun yig'ib tayyorlab qo'ymoq\" ma'nosini bildiruvchi so'z ajratilgan?",
+      A: "Kitob sifatli chiqishi uchun yangi testlar tuzish kerak",
+      B: "Yuklarni ko'chishga tayyorlab qo'ydik",
+      C: "Bu sohaga oid barcha terminlarni bir kitobga jamladim",
+      D: "Qish uchun o'tin g'amlash kerak hali, bolam",
+      correct: "D",
+    },
+    {
+      question: "Qaysi javobdagi so'zlar o'zaro ma'nodosh bo'la olmaydi?",
+      A: "ayon, aniq",
+      B: "ko'rk, chiroy",
+      C: "gavdali, norg'ul",
+      D: "mazali, lazzat",
+      correct: "D",
     },
   ],
   "Ingliz tili": [
     {
-      question: "Choose the correct form: She ___ to school every day.",
-      A: "go",
-      B: "goes",
-      C: "going",
-      D: "gone",
+      question: "Choose the answer which correctly completes the sentence. Faced with petroleum shortages in the 1970's, scientists and ... in the United States stepped up their efforts to develop more efficient heating systems.",
+      A: "engineer's",
+      B: "engineers'",
+      C: "engineer",
+      D: "engineers",
+      correct: "D",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. Lettuce ... good for you. Eat more fresh fruit and vegetables.",
+      A: "been",
+      B: "being",
+      C: "are",
+      D: "is",
+      correct: "D",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. The money I make ... enough to live on.",
+      A: "are",
+      B: "were",
+      C: "has been",
+      D: "is",
+      correct: "D",
+    },
+    {
+      question: "Choose the best answer. Money is a spoiling thing: the more you have ... the more you want ....",
+      A: "it / them",
+      B: "- / them",
+      C: "them / it",
+      D: "it / it",
+      correct: "D",
+    },
+    {
+      question: "Choose the right answer. I've just heard the weather forecast and ... say there's going to be more snow.",
+      A: "they",
+      B: "he",
+      C: "we",
+      D: "it",
+      correct: "A",
+    },
+    {
+      question: "Choose the suitable pronouns instead of the underlined nouns. A woman was sitting in the armchair watching the birds' flight.",
+      A: "he / it / them",
+      B: "she / she / them",
+      C: "she / in / them",
+      D: "she / it / their",
+      correct: "D",
+    },
+    {
+      question: "Choose the appropriate pronouns. The high prices affected the poor.",
+      A: "they / them",
+      B: "you / them",
+      C: "they / her",
+      D: "he / him",
+      correct: "A",
+    },
+    {
+      question: "Choose the appropriate pronouns. I've never heard ... speak to ....",
+      A: "she / he",
+      B: "them / they",
+      C: "her / him",
+      D: "you / they",
+      correct: "C",
+    },
+    {
+      question: "Choose the appropriate form of the adjective. This film is as ... as that one.",
+      A: "more interesting",
+      B: "the most interesting",
+      C: "interesting",
+      D: "most interesting",
+      correct: "C",
+    },
+    {
+      question: "Choose the best answer. We don't read ... books ... they do.",
+      A: "as more / as",
+      B: "as most / as",
+      C: "as many / as",
+      D: "as many / so",
+      correct: "C",
+    },
+    {
+      question: "Choose the best answer. I wanted to go but I've gone ... the idea.",
+      A: "off",
+      B: "away",
+      C: "on",
+      D: "of",
+      correct: "A",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. The farmer was really very upset and warned us to get ... his land.",
+      A: "off",
+      B: "over",
+      C: "from",
+      D: "of",
+      correct: "A",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. I wish you'd turn the radio ..., it's too loud!",
+      A: "down",
+      B: "on",
+      C: "up",
+      D: "of",
+      correct: "A",
+    },
+    {
+      question: "Choose the appropriate form of the adjective. Unfortunately she was ... seriously hurt than we thought at first.",
+      A: "the most",
+      B: "-",
+      C: "more",
+      D: "most",
+      correct: "C",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. The smaller a garden is ... it is to look after.",
+      A: "the easier",
+      B: "easier",
+      C: "more easy",
+      D: "more difficult",
+      correct: "A",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. The louder he shouted, ... he convinced anyone.",
+      A: "more",
+      B: "lesser",
+      C: "the most",
+      D: "the less",
+      correct: "D",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. It is a well-known fact that William Shakespeare was both a playwright ... an actor.",
+      A: "but also",
+      B: "as well as",
+      C: "such",
+      D: "and",
+      correct: "D",
+    },
+    {
+      question: "He was tired. ... he went to bed early.",
+      A: "but",
+      B: "also",
+      C: "because",
+      D: "so",
+      correct: "D",
+    },
+    {
+      question: "Complete the sentence. I got up very early yesterday, ...?",
+      A: "do I",
+      B: "haven't I",
+      C: "isn't he",
+      D: "didn't I",
+      correct: "D",
+    },
+    {
+      question: "Complete the sentence. This winter is not very cold, ...?",
+      A: "isn't it",
+      B: "is it",
+      C: "does it",
+      D: "won't it",
       correct: "B",
     },
     {
-      question: "What is the past tense of 'buy'?",
-      A: "buyed",
-      B: "buyd",
-      C: "bought",
-      D: "boughted",
+      question: "Choose the appropriate form of the verb. If you think he ... a liar why do you consult him?",
+      A: "be",
+      B: "to be",
+      C: "being",
+      D: "is",
+      correct: "D",
+    },
+    {
+      question: "Choose the right answer. Could you give me Setora's telephone number? I wonder ... Setora's telephone number.",
+      A: "if could you give me",
+      B: "if I could give you",
+      C: "if you could give me",
+      D: "could you give me",
       correct: "C",
+    },
+    {
+      question: "Choose the answer which correctly completes the sentence. Mother said to her children, \"Don't make so much noise, father is sleeping\" Mother told her children ... sleeping.",
+      A: "not to make so much noise, father was",
+      B: "not to make so much noise, father is",
+      C: "don't make so much noise, father was",
+      D: "don't make much noise, father is",
+      correct: "A",
+    },
+    {
+      question: "Choose the correct answer. He said: \"Let's go out\".",
+      A: "He suggested going out",
+      B: "He suggested me that we shall go out",
+      C: "He said that they will go out",
+      D: "He suggested to go out",
+      correct: "A",
+    },
+    {
+      question: "Complete the extract. Those who are fond of sports watch football and hockey games on TV.",
+      A: "I am fond of football",
+      B: "People should take care of themselves",
+      C: "They also go to the stadium and enjoy the game there",
+      D: "Where is the sport club",
+      correct: "C",
+    },
+    {
+      question: "Choose the appropriate conclusion which may be taken from the following facts. He has a good tan.",
+      A: "he is going to live in the South next year",
+      B: "he needn't have to live in the South",
+      C: "he must have lived in the South for a long time",
+      D: "he could have lived in the South",
+      correct: "C",
+    },
+    {
+      question: "Choose the best answer. Don't worry if ....",
+      A: "we didn't come",
+      B: "it rained heavily",
+      C: "they don't come on time",
+      D: "was late for the train",
+      correct: "C",
+    },
+    {
+      question: "Choose the best sentence to continue the idea. You'd better take a bus to the city centre.",
+      A: "It's too far to walk",
+      B: "It's easy to find",
+      C: "It's too early to sleep",
+      D: "It's too close to go",
+      correct: "A",
+    },
+    {
+      question: "Complete the sentence. - Their parents are very intelligent, ...",
+      A: "- but their children are stupid",
+      B: "- I saw them yesterday",
+      C: "- I don't know where they work",
+      D: "- yes, you are right. They are not a tight family",
+      correct: "A",
+    },
+    {
+      question: "Choose the best answer. If x equals 10, what is 5x equal to?",
+      A: "fifty",
+      B: "forty",
+      C: "ten",
+      D: "fifteen",
+      correct: "A",
     },
   ],
-  "Nemis tili": [
-    {
-      question: "Wie sagt man 'salom' auf Deutsch?",
-      A: "Danke",
-      B: "Bitte",
-      C: "Hallo",
-      D: "Tschüss",
-      correct: "C",
-    },
-    {
-      question: "'Ich bin Student' jumlasi qanday tarjima qilinadi?",
-      A: "Men o'qituvchiman",
-      B: "Men talabaman",
-      C: "Men shifokorman",
-      D: "Men muhandisman",
-      correct: "B",
-    },
-  ],
-  "Fransuz tili": [
-    {
-      question: "Comment dit-on 'rahmat' en français?",
-      A: "Bonjour",
-      B: "Merci",
-      C: "Salut",
-      D: "Pardon",
-      correct: "B",
-    },
-    {
-      question: "'Je suis étudiant' jumlasi qanday tarjima qilinadi?",
-      A: "Men o'qituvchiman",
-      B: "Men shifokorman",
-      C: "Men talabaman",
-      D: "Men muhandisman",
-      correct: "C",
-    },
-  ],
-  "Rus tili": [
-    {
-      question: "'Здравствуйте' so'zining tarjimasi qanday?",
-      A: "Xayr",
-      B: "Rahmat",
-      C: "Assalomu alaykum",
-      D: "Kechirasiz",
-      correct: "C",
-    },
-    {
-      question: "Rus tilida nechta harf bor?",
-      A: "26",
-      B: "29",
-      C: "33",
-      D: "36",
-      correct: "C",
-    },
-  ],
+  "Nemis tili": [],
+  "Fransuz tili": [],
+  "Rus tili": [],
 };
 
 let isSeeded = false;
@@ -1177,6 +1432,296 @@ export async function dtmRoutes(app: FastifyInstance) {
         totalQuestions: stats._sum.totalQuestions ?? 0,
         totalScore: stats._sum.score ?? 0,
         coins: stats._sum.coinsEarned ?? 0,
+      };
+    }
+  );
+
+  // ============================================
+  // DTM COMBINED TEST ENDPOINTS (90 ta savol)
+  // ============================================
+
+  // GET /api/dtm-test/start - 90 ta savolni bitta testda olish
+  app.get(
+    "/dtm-test/start",
+    { preHandler: [app.authenticate as any] },
+    async (_request: FastifyRequest, reply: FastifyReply) => {
+      await ensureDtmSeedData();
+
+      // Fanlarni olish
+      const tarixSubject = await prisma.subject.findFirst({ where: { name: "Tarix" } });
+      const inglizSubject = await prisma.subject.findFirst({ where: { name: "Ingliz tili" } });
+      const onaTiliSubject = await prisma.subject.findFirst({ where: { name: "Ona tili va adabiyoti" } });
+      const matSubject = await prisma.subject.findFirst({ where: { name: "Matematika" } });
+
+      if (!tarixSubject || !inglizSubject || !onaTiliSubject || !matSubject) {
+        return reply.code(500).send({ error: "Fanlar topilmadi. Seed data yuklanmagan." });
+      }
+
+      // Savollarni olish
+      const tarixQuestions = await prisma.testQuestion.findMany({
+        where: { subjectId: tarixSubject.id },
+        orderBy: { id: "asc" },
+      });
+      const inglizQuestions = await prisma.testQuestion.findMany({
+        where: { subjectId: inglizSubject.id },
+        orderBy: { id: "asc" },
+      });
+      const onaTiliQuestions = await prisma.testQuestion.findMany({
+        where: { subjectId: onaTiliSubject.id },
+        orderBy: { id: "asc" },
+      });
+      const matQuestions = await prisma.testQuestion.findMany({
+        where: { subjectId: matSubject.id },
+        orderBy: { id: "asc" },
+      });
+
+      // Tarixni bo'lish: birinchi 30 ta = fan1, oxirgi 10 ta = majburiy
+      const tarixFan1 = tarixQuestions.slice(0, 30);
+      const tarixMajburiy = tarixQuestions.slice(30, 40);
+
+      // Savollarni tartiblab birlashtirish (1-90)
+      const formatQ = (q: any) => ({
+        id: q.id,
+        question: q.question,
+        options: [
+          { key: "A", text: q.optionA },
+          { key: "B", text: q.optionB },
+          { key: "C", text: q.optionC },
+          { key: "D", text: q.optionD },
+        ],
+      });
+
+      const allQuestions = [
+        ...tarixFan1.map(formatQ),         // 1-30: Tarix (fan1)
+        ...inglizQuestions.map(formatQ),    // 31-60: Ingliz tili (fan2)
+        ...onaTiliQuestions.map(formatQ),   // 61-70: Ona tili (majburiy)
+        ...matQuestions.map(formatQ),       // 71-80: Matematika (majburiy)
+        ...tarixMajburiy.map(formatQ),     // 81-90: Tarix (majburiy)
+      ];
+
+      return {
+        test: {
+          title: "DTM online test topshirish 2026",
+          totalQuestions: allQuestions.length,
+          durationSec: 5400, // 90 daqiqa
+        },
+        sections: [
+          { name: "Tarix", code: "DTM_10218", type: "fan1", startIndex: 0, count: 30, pointsPerQuestion: DTM_SCORING.fan1 },
+          { name: "Chet tili", code: "DTM_10218", type: "fan2", startIndex: 30, count: 30, pointsPerQuestion: DTM_SCORING.fan2 },
+          { name: "Ona tili", code: "DTM_10406", type: "majburiy", startIndex: 60, count: 10, pointsPerQuestion: DTM_SCORING.majburiy },
+          { name: "Matematika", code: "DTM_10406", type: "majburiy", startIndex: 70, count: 10, pointsPerQuestion: DTM_SCORING.majburiy },
+          { name: "Tarix", code: "DTM_10406", type: "majburiy", startIndex: 80, count: 10, pointsPerQuestion: DTM_SCORING.majburiy },
+        ],
+        questions: allQuestions,
+      };
+    }
+  );
+
+  // POST /api/dtm-test/submit - 90 ta javobni tekshirish
+  app.post(
+    "/dtm-test/submit",
+    { preHandler: [app.authenticate as any] },
+    async (
+      request: FastifyRequest<{
+        Body: { answers: number[]; duration?: number };
+      }>,
+      reply: FastifyReply
+    ) => {
+      const userId = request.user.id;
+      const userAnswers = Array.isArray(request.body?.answers) ? request.body.answers : [];
+      const duration = request.body?.duration ?? 0;
+
+      // javoblar.txt dan to'g'ri javoblarni o'qish
+      const correctAnswers = parseJavoblar();
+      if (correctAnswers.size === 0) {
+        return reply.code(500).send({ error: "Javoblar fayli topilmadi yoki bo'sh" });
+      }
+
+      const indexToLetter = (idx: number): string => {
+        if (idx === 0) return "A";
+        if (idx === 1) return "B";
+        if (idx === 2) return "C";
+        return "D";
+      };
+
+      // Har bir savolni tekshirish
+      const questionResults: boolean[] = [];
+      for (let i = 0; i < 90; i++) {
+        const questionNum = i + 1;
+        const correctLetter = correctAnswers.get(questionNum);
+        const userLetter = userAnswers[i] !== undefined && userAnswers[i] !== -1
+          ? indexToLetter(userAnswers[i])
+          : null;
+        questionResults.push(userLetter === correctLetter);
+      }
+
+      // Bo'limlar bo'yicha hisoblash
+      const calcSection = (start: number, count: number, pointsPerQ: number) => {
+        let correct = 0;
+        for (let i = start; i < start + count; i++) {
+          if (questionResults[i]) correct++;
+        }
+        return {
+          correct,
+          total: count,
+          ball: Math.round(correct * pointsPerQ * 10) / 10,
+        };
+      };
+
+      const fan1 = calcSection(0, 30, DTM_SCORING.fan1);     // Tarix
+      const fan2 = calcSection(30, 30, DTM_SCORING.fan2);    // Ingliz tili
+      const majburiyOna = calcSection(60, 10, DTM_SCORING.majburiy);  // Ona tili
+      const majburiyMat = calcSection(70, 10, DTM_SCORING.majburiy);  // Matematika
+      const majburiyTarix = calcSection(80, 10, DTM_SCORING.majburiy); // Tarix
+
+      const majburiy = {
+        correct: majburiyOna.correct + majburiyMat.correct + majburiyTarix.correct,
+        total: 30,
+        ball: Math.round((majburiyOna.ball + majburiyMat.ball + majburiyTarix.ball) * 10) / 10,
+      };
+
+      const jami = {
+        correct: fan1.correct + fan2.correct + majburiy.correct,
+        total: 90,
+        ball: Math.round((fan1.ball + fan2.ball + majburiy.ball) * 10) / 10,
+      };
+
+      const percentage = Math.round((jami.correct / 90) * 1000) / 10;
+
+      // Natijani saqlash (Tarix subject bilan bog'lash)
+      const tarixSubject = await prisma.subject.findFirst({ where: { name: "Tarix" } });
+      const coinsEarned = Math.max(0, Math.round((jami.correct / 90) * 10));
+
+      const result = await prisma.testResult.create({
+        data: {
+          userId,
+          subjectId: tarixSubject?.id ?? 5,
+          score: jami.correct,
+          totalQuestions: 90,
+          answers: userAnswers,
+          coinsEarned,
+        },
+      });
+
+      // Foydalanuvchi ma'lumotlarini olish
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { firstName: true, lastName: true },
+      });
+
+      const fullName = user ? `${user.lastName} ${user.firstName}`.trim() : "Foydalanuvchi";
+
+      const now = new Date();
+      const months = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentyabr", "oktyabr", "noyabr", "dekabr"];
+      const dateStr = `${now.getDate()}-${months[now.getMonth()]}, ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const durationMin = Math.round(duration / 60);
+
+      return {
+        resultId: result.id,
+        fan1: { name: "Tarix", ...fan1 },
+        fan2: { name: "Chet tili", ...fan2 },
+        majburiy: { name: "Majburiy fanlar", ...majburiy },
+        jami,
+        percentage,
+        user: { name: fullName },
+        date: dateStr,
+        duration: `${durationMin} daq.`,
+        questionResults,
+      };
+    }
+  );
+
+  // GET /api/dtm-test/result/:resultId - Natijani ko'rish
+  app.get(
+    "/dtm-test/result/:resultId",
+    { preHandler: [app.authenticate as any] },
+    async (
+      request: FastifyRequest<{ Params: { resultId: string } }>,
+      reply: FastifyReply
+    ) => {
+      const result = await prisma.testResult.findFirst({
+        where: {
+          id: request.params.resultId,
+          userId: request.user.id,
+        },
+        include: {
+          user: { select: { firstName: true, lastName: true } },
+        },
+      });
+
+      if (!result) {
+        return reply.code(404).send({ error: "Natija topilmadi" });
+      }
+
+      const resultFullName = result.user ? `${result.user.lastName} ${result.user.firstName}`.trim() : "Foydalanuvchi";
+
+      // javoblar.txt dan to'g'ri javoblarni o'qish
+      const correctAnswers = parseJavoblar();
+      const userAnswers = (result.answers as number[]) ?? [];
+
+      const indexToLetter = (idx: number): string => {
+        if (idx === 0) return "A";
+        if (idx === 1) return "B";
+        if (idx === 2) return "C";
+        return "D";
+      };
+
+      const questionResults: boolean[] = [];
+      for (let i = 0; i < 90; i++) {
+        const questionNum = i + 1;
+        const correctLetter = correctAnswers.get(questionNum);
+        const userLetter = userAnswers[i] !== undefined && userAnswers[i] !== -1
+          ? indexToLetter(userAnswers[i])
+          : null;
+        questionResults.push(userLetter === correctLetter);
+      }
+
+      const calcSection = (start: number, count: number, pointsPerQ: number) => {
+        let correct = 0;
+        for (let i = start; i < start + count; i++) {
+          if (questionResults[i]) correct++;
+        }
+        return {
+          correct,
+          total: count,
+          ball: Math.round(correct * pointsPerQ * 10) / 10,
+        };
+      };
+
+      const fan1 = calcSection(0, 30, DTM_SCORING.fan1);
+      const fan2 = calcSection(30, 30, DTM_SCORING.fan2);
+      const majburiyOna = calcSection(60, 10, DTM_SCORING.majburiy);
+      const majburiyMat = calcSection(70, 10, DTM_SCORING.majburiy);
+      const majburiyTarix = calcSection(80, 10, DTM_SCORING.majburiy);
+
+      const majburiy = {
+        correct: majburiyOna.correct + majburiyMat.correct + majburiyTarix.correct,
+        total: 30,
+        ball: Math.round((majburiyOna.ball + majburiyMat.ball + majburiyTarix.ball) * 10) / 10,
+      };
+
+      const jami = {
+        correct: fan1.correct + fan2.correct + majburiy.correct,
+        total: 90,
+        ball: Math.round((fan1.ball + fan2.ball + majburiy.ball) * 10) / 10,
+      };
+
+      const percentage = Math.round((jami.correct / 90) * 1000) / 10;
+
+      const months = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentyabr", "oktyabr", "noyabr", "dekabr"];
+      const d = result.createdAt;
+      const dateStr = `${d.getDate()}-${months[d.getMonth()]}, ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+
+      return {
+        resultId: result.id,
+        fan1: { name: "Tarix", ...fan1 },
+        fan2: { name: "Chet tili", ...fan2 },
+        majburiy: { name: "Majburiy fanlar", ...majburiy },
+        jami,
+        percentage,
+        user: { name: resultFullName },
+        date: dateStr,
+        questionResults,
       };
     }
   );
