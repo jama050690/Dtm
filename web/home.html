@@ -389,6 +389,133 @@
             color: var(--primary);
             margin-bottom: 16px;
         }
+
+        @media (max-width: 900px) {
+            .home-nav {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .home-nav .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .home-content {
+                padding: 32px 0;
+            }
+
+            .welcome-banner {
+                padding: 24px 18px;
+                margin-bottom: 28px;
+            }
+
+            .welcome-banner h1 {
+                font-size: 24px;
+                line-height: 1.25;
+            }
+
+            .welcome-banner p {
+                font-size: 14px;
+            }
+
+            .section {
+                margin-bottom: 32px;
+            }
+
+            .section-title {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .service-card {
+                padding: 22px 18px;
+            }
+
+            .test-section {
+                padding: 20px 16px;
+            }
+
+            .test-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .test-info {
+                width: 100%;
+                justify-content: space-between;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .question-text {
+                font-size: 16px;
+                margin-bottom: 14px;
+            }
+
+            .option {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+
+            .test-navigation {
+                gap: 10px;
+            }
+
+            .test-navigation .btn-secondary,
+            .test-navigation .btn-primary {
+                flex: 1;
+            }
+
+            .results-grid,
+            .analytics-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .modal-content {
+                padding: 24px 16px;
+                width: calc(100% - 24px);
+            }
+
+            .modal-score {
+                font-size: 42px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .home-container {
+                padding: 0 12px;
+            }
+
+            .coin-display {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+
+            .coin-display img {
+                width: 20px;
+                height: 20px;
+            }
+
+            .service-icon {
+                width: 52px;
+                height: 52px;
+                margin-bottom: 12px;
+            }
+
+            .service-card h3 {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 

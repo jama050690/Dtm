@@ -49,7 +49,7 @@ async function initGoogleAuth() {
                 size: 'large',
                 text: 'signin_with',
                 shape: 'pill',
-                width: 320
+                width: getGoogleButtonWidth()
             });
         }
 
@@ -59,7 +59,7 @@ async function initGoogleAuth() {
                 size: 'large',
                 text: 'signup_with',
                 shape: 'pill',
-                width: 320
+                width: getGoogleButtonWidth()
             });
         }
 
@@ -68,9 +68,13 @@ async function initGoogleAuth() {
     }
 }
 
+function getGoogleButtonWidth() {
+    return Math.min(320, Math.max(220, window.innerWidth - 56));
+}
+
 function renderGooglePlaceholderButton(container) {
     container.innerHTML = `
-        <button type="button" class="btn-secondary" style="width:320px;background:#fff;color:#111827;border:1px solid #d1d5db;"
+        <button type="button" class="btn-secondary" style="width:min(100%,320px);background:#fff;color:#111827;border:1px solid #d1d5db;"
             id="googleFallbackBtn">
             <span style="font-weight:700;color:#4285F4;">G</span>
             Google bilan kirish

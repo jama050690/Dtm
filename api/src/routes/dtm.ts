@@ -25,40 +25,34 @@ type Direction = {
 };
 
 const defaultDirections: Direction[] = [
-  { id: 1, name: "Ta'lim", description: "Ta'lim yo'nalishlari" },
-  { id: 2, name: "Gumanitar fanlar", description: "Til, adabiyot va madaniyat fanlari" },
-  { id: 3, name: "Ijtimoiy fanlar, jurnalistika va axborot", description: "Jamiyat va axborotga oid yo'nalishlar" },
-  { id: 4, name: "Biznes, boshqaruv va huquq", description: "Iqtisodiyot, menejment va huquq" },
-  { id: 5, name: "Tabiiy fanlar, matematika va statistika", description: "Matematika va tabiiy fanlar" },
-  { id: 6, name: "Axborot-kommunikatsiya texnologiyalari (AKT)", description: "IT va AKT yo'nalishlari" },
-  { id: 7, name: "Muhandislik, ishlab chiqarish va qurilish", description: "Muhandislik va texnik yo'nalishlar" },
-  { id: 8, name: "Qishloq xo'jaligi va atrof-muhit", description: "Agro va ekologiya yo'nalishlari" },
-  { id: 9, name: "Sog'liqni saqlash va ijtimoiy ta'minot", description: "Tibbiyot va ijtimoiy himoya" },
-  { id: 10, name: "Xizmatlar sohasi", description: "Servis va xizmat ko'rsatish sohalari" },
+  { id: 1, name: "Aniq fanlar", description: "Matematika va fizika yo'nalishi" },
+  { id: 2, name: "Tabiiy fanlar", description: "Kimyo va biologiya yo'nalishi" },
+  { id: 3, name: "Ijtimoiy fanlar", description: "Tarix, huquq va geografiya yo'nalishi" },
+  { id: 4, name: "Til va adabiyot fanlari", description: "Ona tili, adabiyot va xorijiy tillar yo'nalishi" },
 ];
 
 const defaultSubjects: Subject[] = [
   {
     id: 1,
-    directionId: 5,
+    directionId: 1,
     name: "Matematika",
     description: "Algebra va geometriya",
   },
   {
     id: 2,
-    directionId: 5,
+    directionId: 1,
     name: "Fizika",
     description: "Mexanika va elektr",
   },
   {
     id: 3,
-    directionId: 5,
+    directionId: 2,
     name: "Kimyo",
     description: "Organik va noorganik kimyo",
   },
   {
     id: 4,
-    directionId: 5,
+    directionId: 2,
     name: "Biologiya",
     description: "Tirik organizmlar dunyosi",
   },
@@ -143,6 +137,12 @@ let isSeeded = false;
 
 async function ensureDtmSeedData() {
   if (isSeeded) return;
+  const activeDirectionIds = defaultDirections.map((direction) => direction.id);
+
+  await prisma.direction.updateMany({
+    where: { id: { notIn: activeDirectionIds } },
+    data: { isActive: false },
+  });
 
   for (const direction of defaultDirections) {
     await prisma.direction.upsert({

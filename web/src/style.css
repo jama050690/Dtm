@@ -882,10 +882,15 @@ a {
   }
 
   .nav-links {
-    gap: 16px;
+    gap: 10px;
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .nav-links li {
+    display: flex;
+    align-items: center;
   }
 
   .nav-links a:not(.btn-primary) {
@@ -896,6 +901,12 @@ a {
   .nav-links .btn-primary {
     padding: 8px 16px;
     font-size: 13px;
+  }
+
+  .nav-links .btn-secondary,
+  .btn-logout {
+    padding: 8px 12px;
+    font-size: 12px;
   }
 
   .user-menu {
@@ -1108,6 +1119,35 @@ a {
 
 /* Small Mobile */
 @media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  .logo {
+    font-size: 16px;
+    gap: 8px;
+  }
+
+  .logo-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .nav-links {
+    gap: 8px;
+  }
+
+  .nav-links a:not(.btn-primary) {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
   .hero h1 {
     font-size: 24px;
   }
