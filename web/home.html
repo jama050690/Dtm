@@ -997,43 +997,47 @@
         };
 
         // Exam form configuration per direction
+        // fan2ByFan1: 1-Fan tanlanganda 2-Fan tanlovlari dinamik o'zgaradi
+        const chetTilOptions = ['Ingliz tili', 'Fransuz tili', 'Nemis tili'];
+
         const examConfig = {
             1: { // Aniq fanlar
-                fan1Label: '1-Fan (mutaxassislik)',
-                fan1Options: ['Matematika'],
-                fan2Label: '2-Fan (mutaxassislik)',
-                fan2Options: ['Fizika'],
-                hasChetTil: false
+                fan1Options: ['Matematika', 'Fizika'],
+                fan2ByFan1: {
+                    'Matematika': ['Fizika', 'Geografiya', 'Ona tili va adabiyoti', 'Kasbiy (ijodiy) imtihon', 'Chet tili'],
+                    'Fizika': ['Matematika', 'Chet tili']
+                }
             },
             2: { // Tabiiy fanlar
-                fan1Label: '1-Fan (mutaxassislik)',
-                fan1Options: ['Biologiya'],
-                fan2Label: '2-Fan (mutaxassislik)',
-                fan2Options: ['Kimyo'],
-                hasChetTil: false
+                fan1Options: ['Kimyo', 'Biologiya'],
+                fan2ByFan1: {
+                    'Kimyo': ['Biologiya', 'Matematika', 'Ingliz tili'],
+                    'Biologiya': ['Kimyo', 'Ona tili va adabiyoti']
+                }
             },
-            3: { // Ijtimoiy fanlar
-                fan1Label: '1-Fan (mutaxassislik)',
-                fan1Options: ['Tarix'],
-                fan2Label: '2-Fan (mutaxassislik)',
-                fan2Options: ['Geografiya', 'Huquq'],
-                hasChetTil: false
+            3: { // Ijtimoiy-gumanitar fanlar
+                fan1Options: ['Tarix', 'Geografiya', 'Huquq'],
+                fan2ByFan1: {
+                    'Tarix': ['Matematika', 'Geografiya', 'Ona tili va adabiyoti', 'Kasbiy (ijodiy) imtihon', 'Chet tili'],
+                    'Geografiya': ['Matematika'],
+                    'Huquq': ['Chet tili']
+                }
             },
-            4: { // Til va adabiyot fanlari
-                fan1Label: '1-Fan (mutaxassislik)',
-                fan1Options: ['Ona tili va adabiyoti'],
-                fan2Label: '2-Fan (mutaxassislik)',
-                fan2Options: ['Chet tili'],
-                hasChetTil: true,
-                chetTilOptions: ['Ingliz tili', 'Fransuz tili', 'Nemis tili', 'Rus tili']
+            4: { // Tillar
+                fan1Options: ['O\'zbek tili va adabiyoti', 'Rus tili', 'Ingliz tili', 'Nemis tili', 'Fransuz tili'],
+                fan2ByFan1: {
+                    'O\'zbek tili va adabiyoti': ['Chet tili'],
+                    'Rus tili': ['Tarix', 'Ona tili va adabiyoti', 'Chet tili'],
+                    'Ingliz tili': ['Ona tili va adabiyoti'],
+                    'Nemis tili': ['Ona tili va adabiyoti'],
+                    'Fransuz tili': ['Ona tili va adabiyoti']
+                }
             },
             5: { // Kasbiy ijodiy imtihon
-                fan1Label: '1-Fan (mutaxassislik)',
                 fan1Options: ['Kasbiy (ijodiy) imtihon'],
-                fan2Label: '2-Fan (mutaxassislik)',
-                fan2Options: ['Ona tili va adabiyot', 'Chet tili'],
-                hasChetTil: true,
-                chetTilOptions: ['Ingliz tili', 'Fransuz tili', 'Nemis tili']
+                fan2ByFan1: {
+                    'Kasbiy (ijodiy) imtihon': ['Ona tili va adabiyot', 'Chet tili']
+                }
             }
         };
 
@@ -1139,26 +1143,10 @@
                 `<option value="${opt}">${localizeSubjectName(opt)}</option>`
             ).join('');
 
-            // Build fan2 options HTML
-            const fan2OptionsHtml = config.fan2Options.map(opt =>
+            // Build chet til options
+            const chetOptionsHtml = chetTilOptions.map(opt =>
                 `<option value="${opt}">${localizeSubjectName(opt)}</option>`
             ).join('');
-
-            // Build chet til options if available
-            let chetTilHtml = '';
-            if (config.hasChetTil && config.chetTilOptions) {
-                const chetOptions = config.chetTilOptions.map(opt =>
-                    `<option value="${opt}">${localizeSubjectName(opt)}</option>`
-                ).join('');
-                chetTilHtml = `
-                    <div class="exam-form-group full-width" id="chetTilGroup" style="display: none;">
-                        <label>Chet tilini tanlang</label>
-                        <select id="chetTilSelect">
-                            ${chetOptions}
-                        </select>
-                    </div>
-                `;
-            }
 
             const formHtml = `
                 <div style="grid-column: 1 / -1;">
@@ -1184,16 +1172,14 @@
                     <div class="exam-form-card">
                         <div class="exam-form-row">
                             <div class="exam-form-group">
-                                <label>${config.fan1Label}</label>
+                                <label>1-Fan (mutaxassislik)</label>
                                 <select id="fan1Select">
                                     ${fan1OptionsHtml}
                                 </select>
                             </div>
                             <div class="exam-form-group">
-                                <label>${config.fan2Label}</label>
-                                <select id="fan2Select">
-                                    ${fan2OptionsHtml}
-                                </select>
+                                <label>2-Fan (mutaxassislik)</label>
+                                <select id="fan2Select"></select>
                             </div>
                         </div>
 
@@ -1202,7 +1188,12 @@
                             <div class="exam-mandatory-display">Ona tili, Tarix, Matematika</div>
                         </div>
 
-                        ${chetTilHtml}
+                        <div class="exam-form-group" id="chetTilGroup" style="display: none; margin-bottom: 20px;">
+                            <label>Chet tilini tanlang</label>
+                            <select id="chetTilSelect">
+                                ${chetOptionsHtml}
+                            </select>
+                        </div>
 
                         <button class="exam-start-btn" onclick="startExam(${directionId})">Imtihonni boshlash</button>
 
@@ -1215,16 +1206,30 @@
 
             grid.innerHTML = formHtml;
 
-            // Add fan2 change listener for chet til visibility
+            const fan1Select = document.getElementById('fan1Select');
             const fan2Select = document.getElementById('fan2Select');
             const chetTilGroup = document.getElementById('chetTilGroup');
-            if (fan2Select && chetTilGroup) {
-                const updateChetTil = () => {
-                    chetTilGroup.style.display = fan2Select.value === 'Chet tili' ? 'flex' : 'none';
-                };
-                fan2Select.addEventListener('change', updateChetTil);
-                updateChetTil();
+
+            // Update fan2 options when fan1 changes
+            function updateFan2Options() {
+                const fan1Val = fan1Select.value;
+                const fan2Options = config.fan2ByFan1[fan1Val] || [];
+                fan2Select.innerHTML = fan2Options.map(opt =>
+                    `<option value="${opt}">${localizeSubjectName(opt)}</option>`
+                ).join('');
+                updateChetTilVisibility();
             }
+
+            // Show/hide chet til based on fan2 value
+            function updateChetTilVisibility() {
+                chetTilGroup.style.display = fan2Select.value === 'Chet tili' ? 'flex' : 'none';
+            }
+
+            fan1Select.addEventListener('change', updateFan2Options);
+            fan2Select.addEventListener('change', updateChetTilVisibility);
+
+            // Initial render
+            updateFan2Options();
 
             // Load exam stats
             loadExamStats(directionId);
