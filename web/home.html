@@ -268,62 +268,78 @@
             }
         }
 
-        /* Test Section */
+        /* Test Section - DTM Style */
         .test-section {
             display: none;
-            background: var(--card-background);
-            border-radius: var(--radius-xl);
-            padding: 32px;
-            box-shadow: var(--shadow-md);
         }
 
         .test-section.active {
-            display: block;
-        }
-
-        .test-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .test-info {
             display: flex;
             gap: 24px;
+            align-items: flex-start;
         }
 
-        .test-info span {
+        .test-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .test-subject-header {
+            text-align: center;
+            padding: 16px 24px;
+            background: var(--card-background);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .test-subject-header h3 {
+            font-size: 18px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .test-subject-header .subject-code {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
         }
 
         .question-card {
-            margin-bottom: 24px;
+            background: var(--card-background);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
         }
 
         .question-text {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 20px;
             color: var(--text-primary);
+            line-height: 1.6;
         }
 
         .options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .option {
-            padding: 16px 20px;
+            padding: 14px 18px;
             border: 2px solid var(--border-color);
             border-radius: var(--radius-md);
             cursor: pointer;
             transition: var(--transition);
             font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .option:hover {
@@ -336,6 +352,31 @@
             background: rgba(79, 70, 229, 0.1);
         }
 
+        .option .option-radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .option.selected .option-radio {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .option.selected .option-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
         .option.correct {
             border-color: var(--success-color);
             background: rgba(34, 197, 94, 0.1);
@@ -346,12 +387,111 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
-        .test-navigation {
+        /* Right Sidebar */
+        .test-sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+        }
+
+        .test-sidebar-card {
+            background: var(--card-background);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .test-sidebar-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .question-grid-btn {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--card-background);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
             display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .question-grid-btn:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .question-grid-btn.answered {
+            background: #3b82f6;
+            color: #fff;
+            border-color: #3b82f6;
+        }
+
+        .question-grid-btn.current {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.15);
+            font-weight: 700;
+        }
+
+        .test-timer-bar {
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border-color);
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+        }
+
+        .test-timer-item {
+            text-align: center;
+        }
+
+        .test-timer-item .timer-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .test-timer-item .timer-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .test-finish-btn {
+            width: 100%;
+            padding: 14px;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .test-finish-btn:hover {
+            background: #dc2626;
         }
 
         .progress-bar {
@@ -581,25 +721,23 @@
                 padding: 22px 18px;
             }
 
-            .test-section {
-                padding: 20px 16px;
-            }
-
-            .test-header {
+            .test-section.active {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
             }
 
-            .test-info {
+            .test-sidebar {
                 width: 100%;
-                justify-content: space-between;
-                gap: 12px;
-                flex-wrap: wrap;
+                position: relative;
+                top: 0;
+                order: -1;
+            }
+
+            .question-grid {
+                grid-template-columns: repeat(10, 1fr);
             }
 
             .question-text {
-                font-size: 16px;
+                font-size: 15px;
                 margin-bottom: 14px;
             }
 
@@ -608,13 +746,8 @@
                 font-size: 14px;
             }
 
-            .test-navigation {
-                gap: 10px;
-            }
-
-            .test-navigation .btn-secondary,
-            .test-navigation .btn-primary {
-                flex: 1;
+            .question-card {
+                padding: 16px;
             }
 
             .results-grid,
@@ -793,36 +926,32 @@
                 </div>
             </section>
 
-            <!-- Test Section -->
+            <!-- Test Section - DTM Style -->
             <section class="section test-section" id="testSection">
-                <div class="test-header">
-                    <h2 class="section-title" style="margin-bottom: 0;"><span data-i18n="home.test">Test</span> - <span id="selectedSubjectName"
-                            data-i18n="home.subject">Fan</span>
-                    </h2>
-                    <div class="test-info">
-                        <span><span data-i18n="home.question">Savol</span>: <span id="currentQuestion">1</span>/<span id="totalQuestions">5</span></span>
-                        <span><span data-i18n="home.time">Vaqt</span>: <span id="timer">05:00</span></span>
+                <!-- Left: Questions -->
+                <div class="test-main" id="testMain">
+                    <!-- Questions will be rendered here by JS -->
+                </div>
+
+                <!-- Right: Sidebar -->
+                <div class="test-sidebar">
+                    <div class="test-sidebar-card">
+                        <div class="test-sidebar-title">DTM online test topshirish 2026</div>
+                        <div class="question-grid" id="questionGrid">
+                            <!-- Grid buttons rendered by JS -->
+                        </div>
+                        <div class="test-timer-bar">
+                            <div class="test-timer-item">
+                                <div class="timer-value" id="timer">03:00:00</div>
+                                <div class="timer-label">Qolgan vaqt</div>
+                            </div>
+                            <div class="test-timer-item">
+                                <div class="timer-value" id="participantCount">0</div>
+                                <div class="timer-label">Ishtirokchilar</div>
+                            </div>
+                        </div>
+                        <button class="test-finish-btn" onclick="finishTest()">Testni yakunlash</button>
                     </div>
-                </div>
-
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
-                </div>
-
-                <div class="question-card" id="questionCard">
-                    <p class="question-text" id="questionText">1. Quyidagilardan qaysi biri dasturlash tili hisoblanadi?
-                    </p>
-                    <div class="options" id="options">
-                        <div class="option" onclick="selectOption(0)">Python</div>
-                        <div class="option" onclick="selectOption(1)">Microsoft Word</div>
-                        <div class="option" onclick="selectOption(2)">Google Chrome</div>
-                        <div class="option" onclick="selectOption(3)">Adobe Photoshop</div>
-                    </div>
-                </div>
-
-                <div class="test-navigation">
-                    <button class="btn-secondary" onclick="prevQuestion()" id="prevBtn" data-i18n="home.prev">Oldingi</button>
-                    <button class="btn-primary" onclick="nextQuestion()" id="nextBtn" data-i18n="home.next">Keyingi</button>
                 </div>
             </section>
 
@@ -1255,32 +1384,42 @@
             }
         }
 
+        // Exam sections config: defines order and question count per section
+        // sections: [{name, subjectName, count}]
+        let examSections = [];
+        let examQuestionsFlat = []; // all questions in order
+
         async function startExam(directionId) {
             const config = examConfig[directionId];
             if (!config) return;
 
             const fan1 = document.getElementById('fan1Select')?.value;
-            const fan2 = document.getElementById('fan2Select')?.value;
+            const fan2Raw = document.getElementById('fan2Select')?.value;
             let chetTil = null;
+            let fan2 = fan2Raw;
 
-            if (fan2 === 'Chet tili') {
+            if (fan2Raw === 'Chet tili') {
                 chetTil = document.getElementById('chetTilSelect')?.value;
+                fan2 = chetTil; // actual subject name
             }
+            if (fan2Raw === 'Ona tili va adabiyot') fan2 = 'Ona tili va adabiyoti';
 
-            // Collect subject names to test
-            const subjectNames = [];
-            if (fan1 && fan1 !== 'Kasbiy (ijodiy) imtihon') subjectNames.push(fan1);
-            if (fan2 && fan2 !== 'Chet tili' && fan2 !== 'Ona tili va adabiyot') {
-                subjectNames.push(fan2);
-            }
-            if (fan2 === 'Ona tili va adabiyot') subjectNames.push('Ona tili va adabiyoti');
-            if (chetTil) subjectNames.push(chetTil);
-            // Always add majburiy fanlar
-            ['Ona tili va adabiyoti', 'Tarix', 'Matematika'].forEach(name => {
-                if (!subjectNames.includes(name)) subjectNames.push(name);
-            });
+            // Build ordered sections: 1-fan(30), 2-fan(30), Ona tili(10), Matematika(10), Tarix(10)
+            const fan1Name = fan1;
+            const fan2Name = fan2;
 
-            // Find subject IDs from allSubjectsCache or fetch all subjects
+            examSections = [
+                { label: fan1Name, subjectName: fan1Name, count: 30 },
+                { label: fan2Name, subjectName: fan2Name, count: 30 },
+                { label: 'Ona tili', subjectName: 'Ona tili va adabiyoti', count: 10 },
+                { label: 'Matematika', subjectName: 'Matematika', count: 10 },
+                { label: 'Tarix', subjectName: 'Tarix', count: 10 }
+            ];
+
+            // Collect all unique subject names
+            const allSubjectNames = [...new Set(examSections.map(s => s.subjectName))];
+
+            // Fetch subjects from cache/API
             let allSubjects = allSubjectsCache;
             if (!allSubjects.length) {
                 try {
@@ -1292,49 +1431,54 @@
                 }
             }
 
-            // Match subject names to IDs
-            const subjectIds = [];
-            for (const name of subjectNames) {
-                const found = allSubjects.find(s => s.name === name);
-                if (found) subjectIds.push(found.id);
-            }
-
-            if (subjectIds.length === 0) {
-                alert(DTM.t('home.no_tests'));
-                return;
-            }
-
-            // Load questions from all selected subjects
+            // Load questions per subject
             const token = localStorage.getItem('token');
-            let allQuestions = [];
-            let primarySubjectId = subjectIds[0];
+            const questionsBySubject = {};
 
-            for (const sid of subjectIds) {
+            for (const name of allSubjectNames) {
+                const found = allSubjects.find(s => s.name === name);
+                if (!found) continue;
                 try {
-                    const resp = await fetch(apiPath(`/api/tests/${sid}`), {
+                    const resp = await fetch(apiPath(`/api/tests/${found.id}`), {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     const questions = await resp.json();
                     if (Array.isArray(questions)) {
-                        allQuestions = allQuestions.concat(questions.map(q => ({ ...q, subjectId: sid })));
+                        questionsBySubject[name] = questions.map(q => ({ ...q, subjectId: found.id, subjectName: name }));
                     }
                 } catch (e) {
-                    console.error(`Error loading tests for subject ${sid}:`, e);
+                    console.error(`Error loading tests for ${name}:`, e);
                 }
             }
 
-            if (allQuestions.length === 0) {
+            // Build flat question list ordered by sections
+            examQuestionsFlat = [];
+            let globalIndex = 1;
+            for (const section of examSections) {
+                const pool = questionsBySubject[section.subjectName] || [];
+                section.startIndex = globalIndex;
+                const selected = pool.slice(0, section.count);
+                for (const q of selected) {
+                    examQuestionsFlat.push({ ...q, globalIndex: globalIndex++, sectionLabel: section.label });
+                }
+                section.endIndex = globalIndex - 1;
+                section.actualCount = selected.length;
+            }
+
+            if (examQuestionsFlat.length === 0) {
                 alert(DTM.t('home.no_tests'));
                 return;
             }
 
-            // Start the test with combined questions
-            currentSubjectId = primarySubjectId;
-            testQuestions = allQuestions;
-            const examTitle = localizeDirectionName(currentDirectionName || '');
-            document.getElementById('selectedSubjectName').textContent = examTitle;
+            // Set up test state
+            currentSubjectId = allSubjects.find(s => s.name === fan1Name)?.id || 1;
+            testQuestions = examQuestionsFlat;
+            selectedAnswers = new Array(examQuestionsFlat.length).fill(-1);
+
             showSection('test');
-            startTest();
+            renderFullExam();
+            renderQuestionGrid();
+            startExamTimer();
         }
 
         async function loadDirections() {
@@ -1438,7 +1582,6 @@
                     break;
                 case 'test':
                     document.getElementById('testSection').classList.add('active');
-                    startTest();
                     break;
                 case 'results':
                     document.getElementById('resultsSection').style.display = 'block';
@@ -1512,97 +1655,114 @@
             }
         }
 
-        // Start test
-        function startTest() {
-            currentQuestionIndex = 0;
-            selectedAnswers = new Array(testQuestions.length).fill(-1);
-            timeLeft = 300;
+        // Render the full exam with all questions grouped by sections
+        function renderFullExam() {
+            const main = document.getElementById('testMain');
+            let html = '';
 
-            document.getElementById('totalQuestions').textContent = testQuestions.length;
-            showQuestion();
-            startTimer();
-        }
+            let currentSection = '';
+            examQuestionsFlat.forEach((q, idx) => {
+                // Section header
+                if (q.sectionLabel !== currentSection) {
+                    currentSection = q.sectionLabel;
+                    const section = examSections.find(s => s.label === currentSection);
+                    html += `<div class="test-subject-header">
+                        <h3>${currentSection} <span class="subject-code">(${section ? section.startIndex + '-' + section.endIndex : ''})</span></h3>
+                    </div>`;
+                }
 
-        // Show current question
-        function showQuestion() {
-            const q = testQuestions[currentQuestionIndex];
-            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
-            document.getElementById('questionText').textContent = q.question;
+                // Question card
+                html += `<div class="question-card" id="question-${idx}">
+                    <p class="question-text">${q.globalIndex}. ${q.question}</p>
+                    <div class="options" id="options-${idx}">`;
 
-            const optionsDiv = document.getElementById('options');
-            optionsDiv.innerHTML = '';
-
-            // Build options from API response (A, B, C, D properties)
-            const optionKeys = ['A', 'B', 'C', 'D'];
-            optionKeys.forEach((key, i) => {
-                if (q[key]) {
-                    const div = document.createElement('div');
-                    div.className = 'option';
-                    if (selectedAnswers[currentQuestionIndex] === i) {
-                        div.classList.add('selected');
+                const optionKeys = ['A', 'B', 'C', 'D'];
+                optionKeys.forEach((key, i) => {
+                    if (q[key]) {
+                        html += `<div class="option" onclick="selectExamOption(${idx}, ${i})" id="opt-${idx}-${i}">
+                            <span class="option-radio"></span>
+                            ${q[key]}
+                        </div>`;
                     }
-                    div.textContent = q[key];
-                    div.onclick = () => selectOption(i);
-                    optionsDiv.appendChild(div);
-                }
+                });
+
+                html += `</div></div>`;
             });
 
-            // Update progress
-            const progress = ((currentQuestionIndex + 1) / testQuestions.length) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
-
-            // Update buttons
-            document.getElementById('prevBtn').style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
-            document.getElementById('nextBtn').textContent =
-                currentQuestionIndex === testQuestions.length - 1 ? DTM.t('home.finish') : DTM.t('home.next');
+            main.innerHTML = html;
         }
 
-        // Select option
-        function selectOption(index) {
-            selectedAnswers[currentQuestionIndex] = index;
+        // Select an option for a specific question
+        function selectExamOption(questionIdx, optionIdx) {
+            selectedAnswers[questionIdx] = optionIdx;
 
-            const options = document.querySelectorAll('.option');
-            options.forEach((opt, i) => {
-                if (i === index) {
-                    opt.classList.add('selected');
-                } else {
-                    opt.classList.remove('selected');
+            // Update option styles for this question
+            const optionsDiv = document.getElementById(`options-${questionIdx}`);
+            if (optionsDiv) {
+                const opts = optionsDiv.querySelectorAll('.option');
+                opts.forEach((opt, i) => {
+                    opt.classList.toggle('selected', i === optionIdx);
+                });
+            }
+
+            // Update grid button
+            updateQuestionGrid();
+        }
+
+        // Render question navigation grid (1-90)
+        function renderQuestionGrid() {
+            const grid = document.getElementById('questionGrid');
+            let html = '';
+            for (let i = 0; i < examQuestionsFlat.length; i++) {
+                html += `<button class="question-grid-btn" id="grid-btn-${i}" onclick="scrollToQuestion(${i})">${i + 1}</button>`;
+            }
+            grid.innerHTML = html;
+        }
+
+        // Update grid button states (answered/not)
+        function updateQuestionGrid() {
+            for (let i = 0; i < examQuestionsFlat.length; i++) {
+                const btn = document.getElementById(`grid-btn-${i}`);
+                if (btn) {
+                    btn.classList.toggle('answered', selectedAnswers[i] !== -1);
                 }
-            });
-        }
-
-        // Previous question
-        function prevQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showQuestion();
             }
         }
 
-        // Next question
-        function nextQuestion() {
-            if (currentQuestionIndex < testQuestions.length - 1) {
-                currentQuestionIndex++;
-                showQuestion();
-            } else {
-                finishTest();
+        // Scroll to a specific question
+        function scrollToQuestion(idx) {
+            const el = document.getElementById(`question-${idx}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
-        // Start timer
-        function startTimer() {
+        // Start exam timer (3 hours)
+        function startExamTimer() {
             clearInterval(timer);
-            timer = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
+            timeLeft = 3 * 60 * 60; // 3 soat
+
+            const updateTimer = () => {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
                 const seconds = timeLeft % 60;
                 document.getElementById('timer').textContent =
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            };
+            updateTimer();
 
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimer();
                 if (timeLeft <= 0) {
                     finishTest();
                 }
             }, 1000);
+        }
+
+        // Legacy function kept for showSection('test') compatibility
+        function startTest() {
+            // No-op: exam is started via startExam()
         }
 
         // Finish test
@@ -1611,8 +1771,7 @@
 
             let correct = 0;
             testQuestions.forEach((q, i) => {
-                // Convert letter to index: A=0, B=1, C=2, D=3
-                const correctIndex = q.correct.charCodeAt(0) - 65; // 'A' = 65
+                const correctIndex = q.correct.charCodeAt(0) - 65;
                 if (selectedAnswers[i] === correctIndex) {
                     correct++;
                 }
@@ -1639,10 +1798,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Update coins display
                     document.getElementById('headerCoins').textContent = data.totalCoins;
-
-                    // Show coins earned in modal
                     const coinsEarned = data.coinsEarned || 0;
                     document.getElementById('modalScore').textContent = score + '% +' + coinsEarned + ' 🪙';
                 } else {
