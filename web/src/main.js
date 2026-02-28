@@ -1161,6 +1161,7 @@ async function getStats() {
 
 // Export functions for use in other modules
 window.DTM = {
+    API_URL,
     t,
     getLanguage,
     logout,

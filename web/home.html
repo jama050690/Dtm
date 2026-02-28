@@ -642,7 +642,7 @@
             <section class="section" id="servicesSection">
                 <button class="btn-secondary" id="directionsBackBtn" onclick="showDirections()"
                     style="margin-bottom: 20px; display: none;" data-i18n="common.back">← Orqaga</button>
-                <h2 class="section-title" id="servicesTitle" data-i18n="home.blocks">Bloklar</h2>
+                <h2 class="section-title" id="servicesTitle" data-i18n="home.blocks" style="display: none;">Bloklar</h2>
                 <div class="services-grid" id="subjectsGrid">
                     <div class="service-card">
                         <h3 data-i18n="home.loading">Yuklanmoqda...</h3>
@@ -879,7 +879,7 @@
         // Load user data
         async function loadUserData() {
             try {
-                const response = await fetch('/api/stats', {
+                const response = await fetch(apiPath('/api/stats'), {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -971,7 +971,7 @@
         async function loadDirections() {
             const grid = document.getElementById('subjectsGrid');
             try {
-                const response = await fetch('/api/directions');
+                const response = await fetch(apiPath('/api/directions'));
                 const directions = await response.json();
                 renderDirections(Array.isArray(directions) ? directions : []);
             } catch (error) {
@@ -1001,7 +1001,7 @@
             `;
 
             try {
-                const response = await fetch(`/api/directions/${directionId}/subjects`);
+                const response = await fetch(apiPath(`/api/directions/${directionId}/subjects`));
                 const subjects = await response.json();
                 renderSubjects(Array.isArray(subjects) ? subjects : []);
             } catch (error) {
@@ -1019,13 +1019,19 @@
             loadDirections();
         }
 
+        function apiPath(path) {
+            const base = (window.DTM && typeof window.DTM.API_URL === 'string') ? window.DTM.API_URL : '';
+            if (!base) return path;
+            return `${base}${path}`;
+        }
+
         // Select subject and load tests
         async function selectSubject(subjectId, subjectName) {
             currentSubjectId = subjectId;
             document.getElementById('selectedSubjectName').textContent = subjectName;
 
             try {
-                const response = await fetch(`/api/tests/${subjectId}`, {
+                const response = await fetch(apiPath(`/api/tests/${subjectId}`), {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -1092,7 +1098,7 @@
 
             try {
                 // Get user data
-                const userRes = await fetch('/api/auth/me', {
+                const userRes = await fetch(apiPath('/api/auth/me'), {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const user = await userRes.json();
@@ -1103,7 +1109,7 @@
                 document.getElementById('profileCoins').textContent = user.coins || 0;
 
                 // Get stats
-                const statsRes = await fetch('/api/stats', {
+                const statsRes = await fetch(apiPath('/api/stats'), {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const stats = await statsRes.json();
@@ -1113,7 +1119,7 @@
                 document.getElementById('profileTotalScore').textContent = stats.totalScore || 0;
 
                 // Get recent results
-                const resultsRes = await fetch('/api/results', {
+                const resultsRes = await fetch(apiPath('/api/results'), {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const results = await resultsRes.json();
@@ -1246,7 +1252,7 @@
 
             // Save result to API
             try {
-                const response = await fetch('/api/results', {
+                const response = await fetch(apiPath('/api/results'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
