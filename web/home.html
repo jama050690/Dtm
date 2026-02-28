@@ -1210,26 +1210,7 @@
                     data-i18n="common.back">← Orqaga</button>
                 <h2 class="section-title" data-i18n="home.my_results">Mening Natijalarim</h2>
                 <div class="results-grid" id="resultsGrid">
-                    <div class="result-card">
-                        <h3>Matematika</h3>
-                        <div class="result-score excellent">85%</div>
-                        <div class="result-date">2026-02-20</div>
-                        <div class="result-details">17/20 to'g'ri</div>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>Fizika</h3>
-                        <div class="result-score good">72%</div>
-                        <div class="result-date">2026-02-18</div>
-                        <div class="result-details">14/20 to'g'ri</div>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>Kimyo</h3>
-                        <div class="result-score needs-work">58%</div>
-                        <div class="result-date">2026-02-15</div>
-                        <div class="result-details">12/20 to'g'ri</div>
-                    </div>
+                    <p style="color: var(--text-muted);">Natijalar yuklanmoqda...</p>
                 </div>
             </section>
 
@@ -1528,9 +1509,59 @@
             showSection('services');
         }
 
-        function goResults() {
+        async function goResults() {
             pushUrl('/natijalar');
             showSection('results');
+            await loadResults();
+        }
+
+        async function loadResults() {
+            const grid = document.getElementById('resultsGrid');
+            grid.innerHTML = '<p style="color: var(--text-muted);">Natijalar yuklanmoqda...</p>';
+
+            try {
+                const token = localStorage.getItem('token');
+                const resp = await fetch(apiPath('/api/results'), {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await resp.json();
+
+                if (!data || data.length === 0) {
+                    grid.innerHTML = '<p style="color: var(--text-muted);">Hali natijalar yo\'q. Test yechib ko\'ring!</p>';
+                    return;
+                }
+
+                // Har bir fan bo'yicha eng oxirgi natijani olish
+                const latestBySubject = {};
+                data.forEach(r => {
+                    if (!latestBySubject[r.subjectName]) {
+                        latestBySubject[r.subjectName] = r;
+                    }
+                });
+
+                const results = Object.values(latestBySubject);
+
+                grid.innerHTML = results.map(r => {
+                    const percentage = r.totalQuestions > 0
+                        ? Math.round((r.score / r.totalQuestions) * 100)
+                        : 0;
+                    const dateStr = new Date(r.date).toLocaleDateString('uz-UZ');
+
+                    let scoreClass = 'needs-work';
+                    if (percentage >= 80) scoreClass = 'excellent';
+                    else if (percentage >= 60) scoreClass = 'good';
+
+                    return `<div class="result-card">
+                        <h3>${r.subjectName}</h3>
+                        <div class="result-score ${scoreClass}">${percentage}%</div>
+                        <div class="result-date">${dateStr}</div>
+                        <div class="result-details">${r.score}/${r.totalQuestions} to'g'ri</div>
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                console.error('Results load error:', e);
+                grid.innerHTML = '<p style="color: var(--text-muted);">Natijalarni yuklashda xatolik</p>';
+            }
         }
 
         function handleRoute() {
@@ -1964,6 +1995,7 @@
                     break;
                 case 'results':
                     document.getElementById('resultsSection').style.display = 'block';
+                    loadResults();
                     break;
                 case 'analytics':
                     document.getElementById('analyticsSection').style.display = 'block';
