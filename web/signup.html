@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ro'yxatdan o'tish - DTM Test Platform</title>
+    <title data-i18n="signup.page_title">Ro'yxatdan o'tish - DTM Test Platform</title>
     <meta name="description" content="DTM Test Platform ga ro'yxatdan o'ting">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,47 +21,51 @@
                     <img src="/logo.svg" alt="DTM Test" class="logo-img">
                     <span class="logo-text">DTM Test</span>
                 </a>
-                <h2>Ro'yxatdan o'tish</h2>
-                <p>Yangi hisob yaratish uchun ma'lumotlaringizni kiriting</p>
+                <h2 data-i18n="signup.heading">Ro'yxatdan o'tish</h2>
+                <p data-i18n="signup.subtitle">Yangi hisob yaratish uchun ma'lumotlaringizni kiriting</p>
             </div>
 
             <form id="signupForm" class="auth-form">
                 <div class="form-group">
-                    <label for="name">To'liq ism</label>
-                    <input type="text" id="name" name="name" placeholder="Ism Familiyangiz" required>
+                    <label for="name" data-i18n="signup.full_name">To'liq ism</label>
+                    <input type="text" id="name" name="name" placeholder="Ism Familiyangiz"
+                        data-i18n-placeholder="signup.full_name_placeholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email manzili</label>
-                    <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                    <label for="email" data-i18n="auth.email_label">Email manzili</label>
+                    <input type="email" id="email" name="email" placeholder="email@example.com"
+                        data-i18n-placeholder="auth.email_placeholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Parol</label>
-                    <input type="password" id="password" name="password" placeholder="Kamida 6 ta belgi" required>
+                    <label for="password" data-i18n="auth.password_label">Parol</label>
+                    <input type="password" id="password" name="password" placeholder="Kamida 6 ta belgi"
+                        data-i18n-placeholder="signup.password_placeholder" required>
                 </div>
                 <div class="form-group">
-                    <label for="confirmPassword">Parolni tasdiqlash</label>
+                    <label for="confirmPassword" data-i18n="signup.confirm_password">Parolni tasdiqlash</label>
                     <input type="password" id="confirmPassword" name="confirmPassword"
-                        placeholder="Parolingizni qayta kiriting" required>
+                        placeholder="Parolingizni qayta kiriting" data-i18n-placeholder="signup.confirm_password_placeholder" required>
                 </div>
                 <button type="submit" class="btn-primary btn-full">
                     <img src="/icon-target.svg" alt="" class="btn-icon">
-                    Ro'yxatdan o'tish
+                    <span data-i18n="nav.signup">Ro'yxatdan o'tish</span>
                 </button>
             </form>
 
             <div class="auth-divider">
-                <span>yoki</span>
+                <span data-i18n="auth.or">yoki</span>
             </div>
             <div id="googleSignupButton" style="display:flex;justify-content:center;margin-bottom:16px;"></div>
 
             <div class="auth-footer">
-                <p>Allaqachon hisobingiz bormi? <a href="/login.html">Kirish</a></p>
+                <p><span data-i18n="signup.has_account">Allaqachon hisobingiz bormi?</span> <a href="/login.html"
+                        data-i18n="nav.login">Kirish</a></p>
             </div>
 
             <div class="auth-links">
                 <a href="/" class="back-link">
                     <span>←</span>
-                    Bosh sahifaga qaytish
+                    <span data-i18n="auth.back_home">Bosh sahifaga qaytish</span>
                 </a>
             </div>
         </div>

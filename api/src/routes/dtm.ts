@@ -29,6 +29,7 @@ const defaultDirections: Direction[] = [
   { id: 2, name: "Tabiiy fanlar", description: "Kimyo va biologiya yo'nalishi" },
   { id: 3, name: "Ijtimoiy fanlar", description: "Tarix, huquq va geografiya yo'nalishi" },
   { id: 4, name: "Til va adabiyot fanlari", description: "Ona tili, adabiyot va xorijiy tillar yo'nalishi" },
+  { id: 5, name: "Kasbiy ijodiy imtihon", description: "Kasbiy va ijodiy yo'nalishlar bo'yicha imtihonlar" },
 ];
 
 const defaultSubjects: Subject[] = [

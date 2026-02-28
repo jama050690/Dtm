@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DTM Test Platform - Bilimlaringizni Sinab Ko'ring</title>
+  <title data-i18n="index.page_title">DTM Test Platform - Bilimlaringizni Sinab Ko'ring</title>
   <meta name="description"
     content="DTM Test Platform - Eng yaxshi test platformasi orqali o'z bilimlaringizni sinab ko'ring">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,9 +24,9 @@
           <span class="logo-text">DTM Test</span>
         </a>
         <ul class="nav-links" id="navLinks">
-          <li><a href="/home.html">Mening Sahifam</a></li>
-          <li><a href="/">Bosh sahifa</a></li>
-          <li><a href="#features">Xizmatlar</a></li>
+          <li><a href="/home.html" data-i18n="nav.my_page">Mening Sahifam</a></li>
+          <li><a href="/" data-i18n="nav.home">Bosh sahifa</a></li>
+          <li><a href="#features" data-i18n="nav.services">Xizmatlar</a></li>
           <li>
             <button class="btn-secondary" onclick="toggleThemeIndex()" style="padding: 8px 12px;" title="Theme toggle">
               <svg id="sunIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -42,12 +42,13 @@
               </svg>
             </button>
           </li>
-          <li id="authLink"><a href="/login.html">Kirish</a></li>
-          <li id="signupLink"><a href="/signup.html" class="btn-primary">Ro'yxatdan o'tish</a></li>
+          <li id="authLink"><a href="/login.html" data-i18n="nav.login">Kirish</a></li>
+          <li id="signupLink"><a href="/signup.html" class="btn-primary" data-i18n="nav.signup">Ro'yxatdan o'tish</a>
+          </li>
           <li id="userMenu" style="display: none;">
             <div class="user-menu">
               <span class="user-name" id="userName">User</span>
-              <button class="btn-logout" onclick="DTM.logout()">Chiqish</button>
+              <button class="btn-logout" onclick="DTM.logout()" data-i18n="nav.logout">Chiqish</button>
             </div>
           </li>
         </ul>
@@ -60,35 +61,35 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-badge" id="heroBadge">
-          <span>YANGI</span>
-          Eng zamonaviy test platformasi
+          <span data-i18n="index.badge_new">YANGI</span>
+          <span data-i18n="index.badge_text">Eng zamonaviy test platformasi</span>
         </div>
-        <h1 id="heroTitle"><span>Bilimlaringizni</span> Sinab Ko'ring va Rivojlaning</h1>
-        <p id="heroDesc">DTM Test Platform orqali turli fanlardan testlar ishlang, natijalaringizni kuzating va o'z
+        <h1 id="heroTitle" data-i18n="index.hero_title" data-i18n-html="true"><span>Bilimlaringizni</span> Sinab Ko'ring va Rivojlaning</h1>
+        <p id="heroDesc" data-i18n="index.hero_desc">DTM Test Platform orqali turli fanlardan testlar ishlang, natijalaringizni kuzating va o'z
           bilimlarini yanada oshiring. Hozir ro'yxatdan o'ting!</p>
 
         <div class="hero-buttons" id="heroButtons">
           <a href="/signup.html" class="btn-primary">
             <img src="/icon-target.svg" alt="" class="btn-icon">
-            Hozir Boshlash
+            <span data-i18n="index.start_now">Hozir Boshlash</span>
           </a>
           <a href="/login.html" class="btn-secondary">
             <img src="/icon-security.svg" alt="" class="btn-icon">
-            Kirish
+            <span data-i18n="nav.login">Kirish</span>
           </a>
         </div>
         <div class="hero-stats">
           <div class="hero-stat">
             <h3>10,000+</h3>
-            <p>Testlar</p>
+            <p data-i18n="index.stat_tests">Testlar</p>
           </div>
           <div class="hero-stat">
             <h3>5,000+</h3>
-            <p>O'quvchilar</p>
+            <p data-i18n="index.stat_students">O'quvchilar</p>
           </div>
           <div class="hero-stat">
             <h3>98%</h3>
-            <p>Mamnuniyat</p>
+            <p data-i18n="index.stat_satisfaction">Mamnuniyat</p>
           </div>
         </div>
       </div>
@@ -103,35 +104,35 @@
   <!-- Logged In User Dashboard -->
   <section class="dashboard" id="userDashboard" style="display: none;">
     <div class="container">
-      <h2>Xush kelibsiz, <span id="welcomeName">User</span>!</h2>
-      <p class="dashboard-subtitle">Quyidagi imkoniyatlardan birini tanlang</p>
+      <h2><span data-i18n="index.welcome_prefix">Xush kelibsiz,</span> <span id="welcomeName">User</span>!</h2>
+      <p class="dashboard-subtitle" data-i18n="index.dashboard_subtitle">Quyidagi imkoniyatlardan birini tanlang</p>
 
       <div class="dashboard-grid">
         <div class="dashboard-card">
           <div class="dashboard-icon">
             <img src="/icon-test.svg" alt="Testlar">
           </div>
-          <h3>Testlar</h3>
-          <p>Turli fanlardan testlarni ishlang</p>
-          <a href="#" class="btn-primary">Testlarni ko'rish</a>
+          <h3 data-i18n="index.card_tests">Testlar</h3>
+          <p data-i18n="index.card_tests_desc">Turli fanlardan testlarni ishlang</p>
+          <a href="#" class="btn-primary" data-i18n="index.card_tests_btn">Testlarni ko'rish</a>
         </div>
 
         <div class="dashboard-card">
           <div class="dashboard-icon">
             <img src="/icon-analytics.svg" alt="Natijalar">
           </div>
-          <h3>Natijalarim</h3>
-          <p>Oldingi test natijalarini ko'ring</p>
-          <a href="#" class="btn-primary">Natijalarni ko'rish</a>
+          <h3 data-i18n="index.card_results">Natijalarim</h3>
+          <p data-i18n="index.card_results_desc">Oldingi test natijalarini ko'ring</p>
+          <a href="#" class="btn-primary" data-i18n="index.card_results_btn">Natijalarni ko'rish</a>
         </div>
 
         <div class="dashboard-card">
           <div class="dashboard-icon">
             <img src="/icon-target.svg" alt="Progress">
           </div>
-          <h3>Mening Progressim</h3>
-          <p>O'z bilimingizni rivojlanishini kuzating</p>
-          <a href="#" class="btn-primary">Progressni ko'rish</a>
+          <h3 data-i18n="index.card_progress">Mening Progressim</h3>
+          <p data-i18n="index.card_progress_desc">O'z bilimingizni rivojlanishini kuzating</p>
+          <a href="#" class="btn-primary" data-i18n="index.card_progress_btn">Progressni ko'rish</a>
         </div>
       </div>
     </div>
@@ -140,16 +141,16 @@
   <!-- Features Section -->
   <section class="features" id="features">
     <div class="container">
-      <h2>Nega Bizni Tanlash kerak?</h2>
-      <p class="features-subtitle">Bizning platforma sizga eng yaxshi tajribani taqdim etadi</p>
+      <h2 data-i18n="index.features_title">Nega Bizni Tanlash kerak?</h2>
+      <p class="features-subtitle" data-i18n="index.features_subtitle">Bizning platforma sizga eng yaxshi tajribani taqdim etadi</p>
 
       <div class="feature-grid">
         <div class="feature-card">
           <div class="feature-icon">
             <img src="/icon-test.svg" alt="Testlar">
           </div>
-          <h3>Keng Qamrovli Testlar</h3>
-          <p>Turli fanlar va mavzular bo'yicha ko'plab testlar. Har bir test diqqat bilan tayyorlangan va sifat
+          <h3 data-i18n="index.feature1_title">Keng Qamrovli Testlar</h3>
+          <p data-i18n="index.feature1_desc">Turli fanlar va mavzular bo'yicha ko'plab testlar. Har bir test diqqat bilan tayyorlangan va sifat
             nazoratidan o'tgan.</p>
         </div>
 
@@ -157,8 +158,8 @@
           <div class="feature-icon">
             <img src="/icon-speed.svg" alt="Tez natijalar">
           </div>
-          <h3>Tez va Aniq Natijalar</h3>
-          <p>Testni topshirishingiz bilan darhol natijangizni ko'ring. To'g'ri va noto'g'ri javoblar batafsil tahlil
+          <h3 data-i18n="index.feature2_title">Tez va Aniq Natijalar</h3>
+          <p data-i18n="index.feature2_desc">Testni topshirishingiz bilan darhol natijangizni ko'ring. To'g'ri va noto'g'ri javoblar batafsil tahlil
             qilingan.</p>
         </div>
 
@@ -166,8 +167,8 @@
           <div class="feature-icon">
             <img src="/icon-analytics.svg" alt="Analitika">
           </div>
-          <h3>Batafsil Analitika</h3>
-          <p>Har bir test bo'yicha o'z progressiyingizni kuzating. Kuchli va zaif tomonlaringizni aniqlang va
+          <h3 data-i18n="index.feature3_title">Batafsil Analitika</h3>
+          <p data-i18n="index.feature3_desc">Har bir test bo'yicha o'z progressiyingizni kuzating. Kuchli va zaif tomonlaringizni aniqlang va
             yaxshilaning.</p>
         </div>
 
@@ -175,8 +176,8 @@
           <div class="feature-icon">
             <img src="/icon-target.svg" alt="Shaxsiylashtirish">
           </div>
-          <h3>Shaxsiylashtirilgan Yondashuv</h3>
-          <p>Har bir foydalanuvchi uchun moslashgan ta'lim strategiyasi. O'zingizga mos tezlik va qiyinlik darajasini
+          <h3 data-i18n="index.feature4_title">Shaxsiylashtirilgan Yondashuv</h3>
+          <p data-i18n="index.feature4_desc">Har bir foydalanuvchi uchun moslashgan ta'lim strategiyasi. O'zingizga mos tezlik va qiyinlik darajasini
             tanlang.</p>
         </div>
 
@@ -184,8 +185,8 @@
           <div class="feature-icon">
             <img src="/icon-security.svg" alt="Xavfsizlik">
           </div>
-          <h3>Xavfsiz va Ishonchli</h3>
-          <p>Ma'lumotlaringiz xavfsiz saqlanadi. Sizning shaxsiy ma'lumotlaringiz maxfiylik siyosatiga muvofiq
+          <h3 data-i18n="index.feature5_title">Xavfsiz va Ishonchli</h3>
+          <p data-i18n="index.feature5_desc">Ma'lumotlaringiz xavfsiz saqlanadi. Sizning shaxsiy ma'lumotlaringiz maxfiylik siyosatiga muvofiq
             himoyalangan.</p>
         </div>
 
@@ -193,8 +194,8 @@
           <div class="feature-icon">
             <img src="/icon-support.svg" alt="Qo'llab-quvvatlash">
           </div>
-          <h3>24/7 Qo'llab-quvvatlash</h3>
-          <p>Har qanday savol yoki muammolar bo'yicha bizning qo'llab-quvvatlash jamoamiz sizga yordam berishga tayyor.
+          <h3 data-i18n="index.feature6_title">24/7 Qo'llab-quvvatlash</h3>
+          <p data-i18n="index.feature6_desc">Har qanday savol yoki muammolar bo'yicha bizning qo'llab-quvvatlash jamoamiz sizga yordam berishga tayyor.
           </p>
         </div>
       </div>
@@ -210,27 +211,27 @@
             <img src="/logo.svg" alt="DTM Test" class="logo-img">
             <span class="logo-text">DTM Test</span>
           </a>
-          <p>Eng yaxshi test platformasi. O'z bilimlaringizni sinab ko'ring va rivojlaning.</p>
+          <p data-i18n="index.footer_brand_desc">Eng yaxshi test platformasi. O'z bilimlaringizni sinab ko'ring va rivojlaning.</p>
         </div>
         <div class="footer-links">
-          <h4>Havolalar</h4>
+          <h4 data-i18n="footer.links">Havolalar</h4>
           <ul>
-            <li><a href="/">Bosh sahifa</a></li>
-            <li><a href="/login.html">Kirish</a></li>
-            <li><a href="/signup.html">Ro'yxatdan o'tish</a></li>
+            <li><a href="/" data-i18n="nav.home">Bosh sahifa</a></li>
+            <li><a href="/login.html" data-i18n="nav.login">Kirish</a></li>
+            <li><a href="/signup.html" data-i18n="nav.signup">Ro'yxatdan o'tish</a></li>
           </ul>
         </div>
         <div class="footer-links">
-          <h4>Yordam</h4>
+          <h4 data-i18n="footer.help">Yordam</h4>
           <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Qo'llab-quvvatlash</a></li>
-            <li><a href="#">Maxfiylik siyosati</a></li>
+            <li><a href="#" data-i18n="footer.faq">FAQ</a></li>
+            <li><a href="#" data-i18n="footer.support">Qo'llab-quvvatlash</a></li>
+            <li><a href="#" data-i18n="footer.privacy">Maxfiylik siyosati</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 DTM Test Platform. Barcha huquqlar himoyalangan.</p>
+        <p data-i18n="footer.copyright" data-i18n-html="true">&copy; 2026 DTM Test Platform. Barcha huquqlar himoyalangan.</p>
       </div>
     </div>
   </footer>
@@ -287,17 +288,17 @@
         document.getElementById('userName').textContent = user.name || 'Foydalanuvchi';
 
         // Update hero section
-        document.getElementById('heroBadge').innerHTML = '<span>HARAKAT</span> Testlarni ishlashni boshlang';
-        document.getElementById('heroTitle').innerHTML = `<span>${user.name || 'Foydalanuvchi'}</span>, Bilimlaringizni Sinab Ko'ring`;
-        document.getElementById('heroDesc').textContent = 'DTM Test Platform orqali bilimlaringizni sinab ko\'ring va rivojlaning. Endi siz testlarni ishlashingiz mumkin!';
+        document.getElementById('heroBadge').innerHTML = `<span>${DTM.t('index.badge_action')}</span> ${DTM.t('index.badge_action_text')}`;
+        document.getElementById('heroTitle').innerHTML = `<span>${user.name || 'Foydalanuvchi'}</span>, ${DTM.t('index.logged_hero_title')}`;
+        document.getElementById('heroDesc').textContent = DTM.t('index.logged_hero_desc');
         document.getElementById('heroButtons').innerHTML = `
             <a href="/home.html" class="btn-primary">
               <img src="/icon-test.svg" alt="" class="btn-icon">
-              Testlarni boshlash
+              ${DTM.t('index.start_tests')}
             </a>
-            <button class="btn-secondary" onclick="logout()">
+            <button class="btn-secondary" onclick="DTM.logout()">
               <img src="/icon-security.svg" alt="" class="btn-icon">
-              Chiqish
+              ${DTM.t('nav.logout')}
             </button>
           `;
 
