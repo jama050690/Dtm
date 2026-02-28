@@ -59,6 +59,7 @@ type Subject = {
 type TestQuestion = {
   id: number;
   question: string;
+  image?: string;
   A: string;
   B: string;
   C: string;
@@ -209,6 +210,7 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
     },
     {
       question: "Rasmdagi qopning og'irligi necha kilogrammga teng?",
+      image: "/74463dda-1294-4aa6-bbf1-066708f40a89.png",
       A: "4",
       B: "3",
       C: "5",
@@ -391,6 +393,7 @@ const defaultTestsBySubject: Record<string, Omit<TestQuestion, "id">[]> = {
     },
     {
       question: "Xaritada ajratib ko'rsatilgan hududdan bo'lgan shaxsni aniqlang.",
+      image: "/09b934f0-4ad7-4a54-86e8-34bb42ef0bc4.png",
       A: "J.Ferri",
       B: "E.Sapata",
       C: "A.Shpis",
@@ -957,6 +960,7 @@ async function ensureDtmSeedData() {
       data: tests.map((test) => ({
         subjectId: subject.id,
         question: test.question,
+        image: test.image ?? null,
         optionA: test.A,
         optionB: test.B,
         optionC: test.C,
@@ -1211,6 +1215,7 @@ export async function dtmRoutes(app: FastifyInstance) {
         questions: questions.map((q) => ({
           id: q.id,
           question: q.question,
+          image: q.image ?? undefined,
           options: [
             { key: "A", text: q.optionA },
             { key: "B", text: q.optionB },
@@ -1489,6 +1494,7 @@ export async function dtmRoutes(app: FastifyInstance) {
       const formatQ = (q: any) => ({
         id: q.id,
         question: q.question,
+        image: q.image ?? undefined,
         options: [
           { key: "A", text: q.optionA },
           { key: "B", text: q.optionB },

@@ -129,6 +129,7 @@ model TestQuestion {
   id        Int      @id @default(autoincrement())
   subjectId Int      @map("subject_id")
   question  String
+  image     String?
   optionA   String   @map("option_a")
   optionB   String   @map("option_b")
   optionC   String   @map("option_c")

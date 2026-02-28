@@ -2086,6 +2086,7 @@
                 // Question card
                 html += `<div class="question-card" id="question-${idx}">
                     <p class="question-text">${q.globalIndex}. ${q.question}</p>
+                    ${q.image ? `<img src="${q.image}" alt="Savol rasmi" style="max-width: 100%; max-height: 300px; border-radius: 8px; margin-bottom: 16px;">` : ''}
                     <div class="options" id="options-${idx}">`;
 
                 const optionKeys = ['A', 'B', 'C', 'D'];
