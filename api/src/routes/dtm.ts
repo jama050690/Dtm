@@ -1,28 +1,37 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { prisma } from "../lib/prisma.js";
 import { readFileSync } from "fs";
-import { resolve } from "path";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // DTM javoblarni txt fayldan o'qish
 function parseJavoblar(): Map<number, string> {
   const answers = new Map<number, string>();
   const possiblePaths = [
+    // __dirname dan project root ga (api/src/routes -> api/src -> api -> Dtm)
+    resolve(__dirname, "..", "..", "..", "tests", "ijtimoiy-fan", "javoblar.txt"),
     resolve(process.cwd(), "..", "tests", "ijtimoiy-fan", "javoblar.txt"),
     resolve(process.cwd(), "tests", "ijtimoiy-fan", "javoblar.txt"),
-    resolve(process.cwd(), "..", "..", "tests", "ijtimoiy-fan", "javoblar.txt"),
   ];
 
   let content = "";
   for (const p of possiblePaths) {
     try {
       content = readFileSync(p, "utf-8");
+      console.log("[DTM] javoblar.txt topildi:", p);
       break;
     } catch {
       continue;
     }
   }
 
-  if (!content) return answers;
+  if (!content) {
+    console.error("[DTM] javoblar.txt topilmadi! Tekshirilgan yo'llar:", possiblePaths);
+    return answers;
+  }
 
   for (const line of content.split("\n")) {
     const match = line.trim().match(/^(\d+)-([A-Da-d])$/);
@@ -937,13 +946,10 @@ async function ensureDtmSeedData() {
     select: { id: true, name: true },
   });
 
+  // BARCHA eski savollarni o'chirish va yangi seed datadan qo'yish
+  await prisma.testQuestion.deleteMany({});
+
   for (const subject of subjects) {
-    const existingCount = await prisma.testQuestion.count({
-      where: { subjectId: subject.id },
-    });
-
-    if (existingCount > 0) continue;
-
     const tests = defaultTestsBySubject[subject.name] ?? [];
     if (tests.length === 0) continue;
 
@@ -1616,6 +1622,18 @@ export async function dtmRoutes(app: FastifyInstance) {
       const dateStr = `${now.getDate()}-${months[now.getMonth()]}, ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
       const durationMin = Math.round(duration / 60);
 
+      // Test tahlili uchun to'g'ri javoblar va foydalanuvchi javoblari
+      const correctLetters: (string | null)[] = [];
+      const userLetters: (string | null)[] = [];
+      for (let i = 0; i < 90; i++) {
+        correctLetters.push(correctAnswers.get(i + 1) || null);
+        userLetters.push(
+          userAnswers[i] !== undefined && userAnswers[i] !== -1
+            ? indexToLetter(userAnswers[i])
+            : null
+        );
+      }
+
       return {
         resultId: result.id,
         fan1: { name: "Tarix", ...fan1 },
@@ -1627,7 +1645,78 @@ export async function dtmRoutes(app: FastifyInstance) {
         date: dateStr,
         duration: `${durationMin} daq.`,
         questionResults,
+        correctLetters,
+        userLetters,
       };
+    }
+  );
+
+  // GET /api/dtm-test/leaderboard - Natijalar jadvali
+  app.get(
+    "/dtm-test/leaderboard",
+    { preHandler: [app.authenticate as any] },
+    async () => {
+      const correctAnswers = parseJavoblar();
+
+      const results = await prisma.testResult.findMany({
+        where: { totalQuestions: 90 },
+        orderBy: { createdAt: "desc" },
+        take: 50,
+        include: {
+          user: { select: { firstName: true, lastName: true } },
+        },
+      });
+
+      const indexToLetter = (idx: number): string => {
+        if (idx === 0) return "A";
+        if (idx === 1) return "B";
+        if (idx === 2) return "C";
+        return "D";
+      };
+
+      const leaderboard = results.map((r) => {
+        const userAnswers = (r.answers as number[]) ?? [];
+
+        const calcSection = (start: number, count: number, pointsPerQ: number) => {
+          let correct = 0;
+          for (let i = start; i < start + count; i++) {
+            const correctLetter = correctAnswers.get(i + 1);
+            const userLetter =
+              userAnswers[i] !== undefined && userAnswers[i] !== -1
+                ? indexToLetter(userAnswers[i])
+                : null;
+            if (userLetter === correctLetter) correct++;
+          }
+          return { correct, ball: Math.round(correct * pointsPerQ * 10) / 10 };
+        };
+
+        const fan1 = calcSection(0, 30, DTM_SCORING.fan1);
+        const fan2 = calcSection(30, 30, DTM_SCORING.fan2);
+        const majOna = calcSection(60, 10, DTM_SCORING.majburiy);
+        const majMat = calcSection(70, 10, DTM_SCORING.majburiy);
+        const majTarix = calcSection(80, 10, DTM_SCORING.majburiy);
+        const majBall = Math.round((majOna.ball + majMat.ball + majTarix.ball) * 10) / 10;
+        const totalBall = Math.round((fan1.ball + fan2.ball + majBall) * 10) / 10;
+
+        const fullName = r.user
+          ? `${r.user.lastName} ${r.user.firstName}`.trim()
+          : "Foydalanuvchi";
+
+        return {
+          rank: 0,
+          name: fullName,
+          fan1Ball: fan1.ball,
+          fan2Ball: fan2.ball,
+          fan3Ball: majBall,
+          totalBall,
+          finishedAt: r.createdAt.toISOString(),
+        };
+      });
+
+      leaderboard.sort((a, b) => b.totalBall - a.totalBall);
+      leaderboard.forEach((item, idx) => (item.rank = idx + 1));
+
+      return leaderboard;
     }
   );
 

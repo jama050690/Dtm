@@ -24,7 +24,7 @@
           <span class="logo-text">DTM Test</span>
         </a>
         <ul class="nav-links" id="navLinks">
-          <li><a href="/home.html" data-i18n="nav.my_page">Mening Sahifam</a></li>
+          <li><a href="/home" data-i18n="nav.my_page">Mening Sahifam</a></li>
           <li><a href="/" data-i18n="nav.home">Bosh sahifa</a></li>
           <li><a href="#features" data-i18n="nav.services">Xizmatlar</a></li>
           <li>
@@ -42,8 +42,8 @@
               </svg>
             </button>
           </li>
-          <li id="authLink"><a href="/login.html" data-i18n="nav.login">Kirish</a></li>
-          <li id="signupLink"><a href="/signup.html" class="btn-primary" data-i18n="nav.signup">Ro'yxatdan o'tish</a>
+          <li id="authLink"><a href="/login" data-i18n="nav.login">Kirish</a></li>
+          <li id="signupLink"><a href="/signup" class="btn-primary" data-i18n="nav.signup">Ro'yxatdan o'tish</a>
           </li>
           <li id="userMenu" style="display: none;">
             <div class="user-menu">
@@ -69,11 +69,11 @@
           bilimlarini yanada oshiring. Hozir ro'yxatdan o'ting!</p>
 
         <div class="hero-buttons" id="heroButtons">
-          <a href="/signup.html" class="btn-primary">
+          <a href="/signup" class="btn-primary">
             <img src="/icon-target.svg" alt="" class="btn-icon">
             <span data-i18n="index.start_now">Hozir Boshlash</span>
           </a>
-          <a href="/login.html" class="btn-secondary">
+          <a href="/login" class="btn-secondary">
             <img src="/icon-security.svg" alt="" class="btn-icon">
             <span data-i18n="nav.login">Kirish</span>
           </a>
@@ -217,8 +217,8 @@
           <h4 data-i18n="footer.links">Havolalar</h4>
           <ul>
             <li><a href="/" data-i18n="nav.home">Bosh sahifa</a></li>
-            <li><a href="/login.html" data-i18n="nav.login">Kirish</a></li>
-            <li><a href="/signup.html" data-i18n="nav.signup">Ro'yxatdan o'tish</a></li>
+            <li><a href="/login" data-i18n="nav.login">Kirish</a></li>
+            <li><a href="/signup" data-i18n="nav.signup">Ro'yxatdan o'tish</a></li>
           </ul>
         </div>
         <div class="footer-links">
@@ -292,7 +292,7 @@
         document.getElementById('heroTitle').innerHTML = `<span>${user.name || 'Foydalanuvchi'}</span>, ${DTM.t('index.logged_hero_title')}`;
         document.getElementById('heroDesc').textContent = DTM.t('index.logged_hero_desc');
         document.getElementById('heroButtons').innerHTML = `
-            <a href="/home.html" class="btn-primary">
+            <a href="/home" class="btn-primary">
               <img src="/icon-test.svg" alt="" class="btn-icon">
               ${DTM.t('index.start_tests')}
             </a>

@@ -791,6 +791,255 @@
                 font-size: 18px;
             }
         }
+
+        /* Confirmation Dialog */
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+        }
+        .confirm-overlay.active { display: flex; }
+        .confirm-box {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .confirm-box h3 {
+            font-size: 20px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+        .confirm-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .confirm-btns button {
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-no {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        .btn-no:hover { background: #d1d5db; }
+        .btn-yes {
+            background: #22c55e;
+            color: white;
+        }
+        .btn-yes:hover { background: #16a34a; }
+
+        /* DTM Result Modal */
+        .dtm-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .dtm-modal-overlay.active { display: flex; }
+        .dtm-modal-box {
+            background: white;
+            border-radius: 16px;
+            max-width: 620px;
+            width: 100%;
+            padding: 32px;
+        }
+        .dtm-modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .dtm-modal-header h2 {
+            font-size: 22px;
+            color: var(--text-primary);
+        }
+        .dtm-stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .dtm-stat-item {
+            text-align: center;
+            padding: 14px 6px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .dtm-stat-item .ds-icon { font-size: 22px; margin-bottom: 4px; }
+        .dtm-stat-item .ds-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .dtm-stat-item .ds-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .dtm-fans-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .dtm-fan-item {
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .dtm-fan-item.f1 { background: #eff6ff; border-color: #bfdbfe; }
+        .dtm-fan-item.f2 { background: #f0fdf4; border-color: #bbf7d0; }
+        .dtm-fan-item.f3 { background: #fefce8; border-color: #fef08a; }
+        .dtm-fan-item h4 {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        .dtm-fan-item .fan-val {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .dtm-fan-item .fan-ball {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .dtm-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .dtm-actions button {
+            flex: 1;
+            padding: 14px 8px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-lb { background: #3b82f6; color: white; }
+        .btn-lb:hover { background: #2563eb; }
+        .btn-ta { background: #22c55e; color: white; }
+        .btn-ta:hover { background: #16a34a; }
+        .btn-ex { background: #ef4444; color: white; }
+        .btn-ex:hover { background: #dc2626; }
+
+        /* Leaderboard Page */
+        .lb-page {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .lb-page.active { display: block; }
+        .lb-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .lb-table th {
+            background: #1e40af;
+            color: white;
+            padding: 14px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .lb-table td {
+            padding: 11px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+        .lb-table tr:nth-child(even) { background: #f8fafc; }
+        .lb-table tr:hover { background: #eff6ff; }
+
+        /* Test Analysis Page */
+        .ta-page {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .ta-page.active { display: block; }
+        .ta-q {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .ta-q.ok { border-left: 4px solid #22c55e; }
+        .ta-q.err { border-left: 4px solid #ef4444; }
+        .ta-q .ta-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .ta-q .ta-num { font-weight: 700; font-size: 15px; }
+        .ta-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .ta-badge.ok { background: #dcfce7; color: #166534; }
+        .ta-badge.err { background: #fee2e2; color: #991b1b; }
+        .ta-q .ta-text {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        .ta-opts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .ta-opt {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        .ta-opt.user-wrong {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+        .ta-opt.correct-ans {
+            border-color: #22c55e;
+            background: #dcfce7;
+        }
+
+        @media (max-width: 640px) {
+            .dtm-stats-row { grid-template-columns: repeat(2, 1fr); }
+            .dtm-fans-row { grid-template-columns: 1fr; }
+            .dtm-actions { flex-direction: column; }
+            .ta-opts { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 
@@ -804,7 +1053,7 @@
                     <span class="logo-text">DTM Test</span>
                 </a>
                 <ul class="nav-links">
-                    <li><a href="/home.html" data-i18n="nav.my_page">Mening Sahifam</a></li>
+                    <li><a href="/home" data-i18n="nav.my_page">Mening Sahifam</a></li>
                     <li><a href="/" data-i18n="nav.home">Bosh sahifa</a></li>
                     <li>
                         <select data-language-select class="btn-secondary" style="padding: 8px 10px;">
@@ -865,7 +1114,7 @@
 
             <!-- Profile Section -->
             <section class="section" id="profileSection" style="display: none;">
-                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;"
+                <button class="btn-secondary" onclick="goHome()" style="margin-bottom: 20px;"
                     data-i18n="common.back">← Orqaga</button>
                 <h2 class="section-title" data-i18n="home.profile_title">Mening Profilim</h2>
                 <div class="results-grid">
@@ -957,7 +1206,7 @@
 
             <!-- Results Section -->
             <section class="section" id="resultsSection" style="display: none;">
-                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;"
+                <button class="btn-secondary" onclick="goHome()" style="margin-bottom: 20px;"
                     data-i18n="common.back">← Orqaga</button>
                 <h2 class="section-title" data-i18n="home.my_results">Mening Natijalarim</h2>
                 <div class="results-grid" id="resultsGrid">
@@ -986,7 +1235,7 @@
 
             <!-- Analytics Section -->
             <section class="section" id="analyticsSection" style="display: none;">
-                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;"
+                <button class="btn-secondary" onclick="goHome()" style="margin-bottom: 20px;"
                     data-i18n="common.back">← Orqaga</button>
                 <h2 class="section-title" data-i18n="home.analytics">Analitika</h2>
                 <div class="analytics-grid">
@@ -1014,7 +1263,7 @@
 
             <!-- Progress Section -->
             <section class="section" id="progressSection" style="display: none;">
-                <button class="btn-secondary" onclick="showSection('services')" style="margin-bottom: 20px;"
+                <button class="btn-secondary" onclick="goHome()" style="margin-bottom: 20px;"
                     data-i18n="common.back">← Orqaga</button>
                 <h2 class="section-title" data-i18n="home.my_progress">Mening Progressim</h2>
                 <div class="chart-container">
@@ -1036,83 +1285,105 @@
         </div>
     </main>
 
-    <!-- Result Modal (eski - oddiy modal) -->
-    <div class="modal" id="resultModal">
-        <div class="modal-content">
-            <h2 data-i18n="home.test_finished">Test yakunlandi!</h2>
-            <div class="modal-score" id="modalScore">80%</div>
-            <p id="modalMessage">Ajoyib natija!</p>
-            <button class="btn-primary" onclick="closeModal()" style="margin-top: 20px;"
-                data-i18n="common.close">Yopish</button>
+    <!-- Confirmation Dialog -->
+    <div class="confirm-overlay" id="confirmFinishDialog">
+        <div class="confirm-box">
+            <h3>Testni yakunlaysizmi?</h3>
+            <div class="confirm-btns">
+                <button class="btn-no" onclick="closeConfirmDialog()">Yo'q</button>
+                <button class="btn-yes" onclick="confirmFinishTest()">Ha, yakunlayman</button>
+            </div>
         </div>
     </div>
 
-    <!-- DTM Natija Sahifasi -->
-    <div id="dtmResultPage" style="display: none;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; gap: 20px; flex-wrap: wrap;">
-            <!-- Chap tomon: Natija jadvallari -->
-            <div style="flex: 1; min-width: 300px;">
-                <button class="btn-primary" onclick="closeDtmResult()" style="width: 100%; margin-bottom: 20px; padding: 12px; font-size: 16px;">
-                    &larr; Imtihon sahifasi
-                </button>
+    <!-- DTM Result Modal -->
+    <div class="dtm-modal-overlay" id="dtmResultModal">
+        <div class="dtm-modal-box">
+            <div class="dtm-modal-header">
+                <h2>Testlar natijalari</h2>
+            </div>
 
-                <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; background: #fff; margin-bottom: 20px;">
-                    <h2 style="text-align: center; margin-bottom: 20px; font-size: 20px;">DTM online test topshirish 2026</h2>
-
-                    <!-- Ball jadvali -->
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                        <thead>
-                            <tr style="background: #f5f5f5;">
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Tarix</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Chet tili</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Majburiy fanlar</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Jami</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td id="dtmFan1Correct" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmFan2Correct" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmMajburiyCorrect" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmJamiCorrect" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                            </tr>
-                            <tr>
-                                <td id="dtmFan1Ball" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmFan2Ball" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmMajburiyBall" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmJamiBall" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Ishtirokchi jadvali -->
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: #f5f5f5;">
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Ishtirokchi</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Natija</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Sana</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">Vaqt</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td id="dtmUserName" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmPercentage" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmDate" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                                <td id="dtmDuration" style="border: 1px solid #ddd; padding: 10px; text-align: center;"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- Stats row -->
+            <div class="dtm-stats-row">
+                <div class="dtm-stat-item">
+                    <div class="ds-icon">&#9200;</div>
+                    <div class="ds-value" id="rmDuration">0 daq.</div>
+                    <div class="ds-label">Sarflangan vaqt</div>
+                </div>
+                <div class="dtm-stat-item">
+                    <div class="ds-icon">&#9989;</div>
+                    <div class="ds-value" id="rmCorrect">0/90</div>
+                    <div class="ds-label">To'g'ri javoblar</div>
+                </div>
+                <div class="dtm-stat-item">
+                    <div class="ds-icon">&#128202;</div>
+                    <div class="ds-value" id="rmPercent">0%</div>
+                    <div class="ds-label">Natija</div>
+                </div>
+                <div class="dtm-stat-item">
+                    <div class="ds-icon">&#127942;</div>
+                    <div class="ds-value" id="rmBall">0</div>
+                    <div class="ds-label">Ball</div>
                 </div>
             </div>
 
-            <!-- O'ng tomon: Savol gridi -->
-            <div style="min-width: 280px;">
-                <div id="dtmQuestionGrid" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
+            <!-- Fan breakdown -->
+            <div class="dtm-fans-row">
+                <div class="dtm-fan-item f1">
+                    <h4>Tarix</h4>
+                    <div class="fan-val" id="rmFan1Score">0/30</div>
+                    <div class="fan-ball" id="rmFan1Ball">0 ball</div>
                 </div>
+                <div class="dtm-fan-item f2">
+                    <h4>Chet tili</h4>
+                    <div class="fan-val" id="rmFan2Score">0/30</div>
+                    <div class="fan-ball" id="rmFan2Ball">0 ball</div>
+                </div>
+                <div class="dtm-fan-item f3">
+                    <h4>Majburiy fanlar</h4>
+                    <div class="fan-val" id="rmMajScore">0/30</div>
+                    <div class="fan-ball" id="rmMajBall">0 ball</div>
+                </div>
+            </div>
+
+            <!-- 3 action buttons -->
+            <div class="dtm-actions">
+                <button class="btn-lb" onclick="showLeaderboard()">Natijalar jadvali</button>
+                <button class="btn-ta" onclick="showTestAnalysis()">Test tahlili</button>
+                <button class="btn-ex" onclick="exitTest()">Testdan chiqish</button>
             </div>
         </div>
+    </div>
+
+    <!-- Leaderboard Page -->
+    <div class="lb-page" id="leaderboardPage">
+        <div style="margin-bottom: 16px;">
+            <button class="btn-secondary" onclick="closeLeaderboard()">&#8592; Orqaga</button>
+        </div>
+        <h2 style="text-align: center; margin-bottom: 20px; font-size: 22px;">Natijalar jadvali</h2>
+        <table class="lb-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ishtirokchi</th>
+                    <th>1-fan</th>
+                    <th>2-fan</th>
+                    <th>3-fan</th>
+                    <th>Ball</th>
+                    <th>Yakunladi</th>
+                </tr>
+            </thead>
+            <tbody id="lbBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Test Analysis Page -->
+    <div class="ta-page" id="testAnalysisPage">
+        <div style="margin-bottom: 16px;">
+            <button class="btn-secondary" onclick="closeTestAnalysis()">&#8592; Orqaga</button>
+        </div>
+        <h2 style="text-align: center; margin-bottom: 20px; font-size: 22px;">Test tahlili</h2>
+        <div id="taBody"></div>
     </div>
 
     <!-- Footer -->
@@ -1238,19 +1509,84 @@
             }
         };
 
+        // --- URL ROUTING ---
+        let _isPop = false;
+        let _directionsCache = [];
+
+        function toSlug(str) {
+            return str.toLowerCase().replace(/['`]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        }
+
+        function pushUrl(path) {
+            if (!_isPop && location.pathname !== path) {
+                history.pushState(null, '', path);
+            }
+        }
+
+        function goHome() {
+            pushUrl('/home');
+            showSection('services');
+        }
+
+        function goResults() {
+            pushUrl('/natijalar');
+            showSection('results');
+        }
+
+        function handleRoute() {
+            const path = location.pathname;
+            if (path === '/profil') {
+                showSection('profile');
+            } else if (path === '/natijalar') {
+                showSection('results');
+            } else if (path === '/test') {
+                if (examQuestionsFlat.length > 0) {
+                    showSection('test');
+                } else {
+                    goHome();
+                }
+            } else if (path === '/natijalar-jadvali') {
+                if (lastDtmResult) {
+                    showLeaderboardDirect();
+                } else {
+                    goHome();
+                }
+            } else if (path === '/test-tahlili') {
+                if (lastDtmResult) {
+                    showTestAnalysisDirect();
+                } else {
+                    goHome();
+                }
+            } else if (path.startsWith('/home/')) {
+                const slug = path.split('/')[2];
+                showSection('services');
+                setTimeout(() => {
+                    const dir = _directionsCache.find(d => toSlug(d.name) === slug);
+                    if (dir) selectDirection(dir.id, dir.name, true);
+                }, 300);
+            } else {
+                showSection('services');
+            }
+        }
+
+        window.addEventListener('popstate', () => {
+            _isPop = true;
+            handleRoute();
+            _isPop = false;
+        });
+
         // All subjects fetched from API, stored for lookup
         let allSubjectsCache = [];
 
         // Check if user is logged in
         document.addEventListener('DOMContentLoaded', async () => {
-            // Load saved theme
             loadTheme();
 
             const token = localStorage.getItem('token');
             const userStr = localStorage.getItem('user');
 
             if (!token || !userStr) {
-                window.location.href = '/login.html';
+                window.location.href = '/login';
                 return;
             }
 
@@ -1258,9 +1594,14 @@
             document.getElementById('userName').textContent = user.name || 'Foydalanuvchi';
             document.getElementById('welcomeName').textContent = user.name || 'Foydalanuvchi';
 
-            // Load user data including coins
             await loadUserData();
             await loadDirections();
+
+            // Handle initial URL route
+            const path = location.pathname;
+            if (path !== '/home' && path !== '/') {
+                handleRoute();
+            }
         });
 
         // Load user data
@@ -1395,7 +1736,7 @@
                         <button class="exam-start-btn" onclick="startExam(${directionId})">Imtihonni boshlash</button>
 
                         <div class="exam-results-link">
-                            <a href="javascript:void(0)" onclick="showSection('results')">Natijalar jadvali →</a>
+                            <a href="javascript:void(0)" onclick="goResults()">Natijalar jadvali →</a>
                         </div>
                     </div>
                 </div>
@@ -1441,7 +1782,7 @@
                 const stats = await response.json();
                 const el = (id) => document.getElementById(id);
                 if (el('examParticipants')) el('examParticipants').textContent = (stats.totalTests || 0).toLocaleString();
-                if (el('examVariants')) el('examVariants').textContent = stats.totalQuestions || 0;
+                if (el('examVariants')) el('examVariants').textContent = '1';
                 if (el('examAvgResult')) {
                     const avg = stats.totalQuestions > 0 ? Math.round((stats.correctAnswers / stats.totalQuestions) * 100) : 0;
                     el('examAvgResult').textContent = avg + '%';
@@ -1458,95 +1799,58 @@
         let examQuestionsFlat = []; // all questions in order
 
         async function startExam(directionId) {
-            const config = examConfig[directionId];
-            if (!config) return;
+            // Yangi DTM endpoint dan 90 ta savolni olish
+            const token = localStorage.getItem('token');
+            try {
+                const resp = await fetch(apiPath('/api/dtm-test/start'), {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await resp.json();
 
-            const fan1 = document.getElementById('fan1Select')?.value;
-            const fan2Raw = document.getElementById('fan2Select')?.value;
-            let chetTil = null;
-            let fan2 = fan2Raw;
-
-            if (fan2Raw === 'Chet tili') {
-                chetTil = document.getElementById('chetTilSelect')?.value;
-                fan2 = chetTil; // actual subject name
-            }
-            if (fan2Raw === 'Ona tili va adabiyot') fan2 = 'Ona tili va adabiyoti';
-
-            // Build ordered sections: 1-fan(30), 2-fan(30), Ona tili(10), Matematika(10), Tarix(10)
-            const fan1Name = fan1;
-            const fan2Name = fan2;
-
-            examSections = [
-                { label: fan1Name, subjectName: fan1Name, count: 30 },
-                { label: fan2Name, subjectName: fan2Name, count: 30 },
-                { label: 'Ona tili', subjectName: 'Ona tili va adabiyoti', count: 10 },
-                { label: 'Matematika', subjectName: 'Matematika', count: 10 },
-                { label: 'Tarix', subjectName: 'Tarix', count: 10 }
-            ];
-
-            // Collect all unique subject names
-            const allSubjectNames = [...new Set(examSections.map(s => s.subjectName))];
-
-            // Fetch subjects from cache/API
-            let allSubjects = allSubjectsCache;
-            if (!allSubjects.length) {
-                try {
-                    const resp = await fetch(apiPath('/api/subjects'));
-                    allSubjects = await resp.json();
-                } catch (e) {
-                    console.error('Error fetching subjects:', e);
+                if (!resp.ok || !data.questions || data.questions.length === 0) {
+                    alert(DTM.t('home.no_tests') || 'Savollar topilmadi');
                     return;
                 }
+
+                // Sectionlarni o'rnatish
+                examSections = data.sections.map(s => ({
+                    label: s.name,
+                    subjectName: s.name,
+                    count: s.count,
+                    startIndex: s.startIndex + 1,
+                    endIndex: s.startIndex + s.count,
+                    actualCount: s.count,
+                    pointsPerQuestion: s.pointsPerQuestion
+                }));
+
+                // Savollarni flat ro'yxatga o'tkazish
+                examQuestionsFlat = data.questions.map((q, idx) => {
+                    const section = data.sections.find(s => idx >= s.startIndex && idx < s.startIndex + s.count);
+                    return {
+                        ...q,
+                        globalIndex: idx + 1,
+                        sectionLabel: section ? section.name : '',
+                        A: q.options[0]?.text || '',
+                        B: q.options[1]?.text || '',
+                        C: q.options[2]?.text || '',
+                        D: q.options[3]?.text || '',
+                    };
+                });
+
+                currentSubjectId = 5; // Tarix
+                testQuestions = examQuestionsFlat;
+                selectedAnswers = new Array(examQuestionsFlat.length).fill(-1);
+
+                pushUrl('/test');
+                showSection('test');
+                renderFullExam();
+                renderQuestionGrid();
+                startExamTimer();
+
+            } catch (e) {
+                console.error('DTM test start error:', e);
+                alert('Testni yuklashda xatolik yuz berdi');
             }
-
-            // Load questions per subject
-            const token = localStorage.getItem('token');
-            const questionsBySubject = {};
-
-            for (const name of allSubjectNames) {
-                const found = allSubjects.find(s => s.name === name);
-                if (!found) continue;
-                try {
-                    const resp = await fetch(apiPath(`/api/tests/${found.id}`), {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    const questions = await resp.json();
-                    if (Array.isArray(questions)) {
-                        questionsBySubject[name] = questions.map(q => ({ ...q, subjectId: found.id, subjectName: name }));
-                    }
-                } catch (e) {
-                    console.error(`Error loading tests for ${name}:`, e);
-                }
-            }
-
-            // Build flat question list ordered by sections
-            examQuestionsFlat = [];
-            let globalIndex = 1;
-            for (const section of examSections) {
-                const pool = questionsBySubject[section.subjectName] || [];
-                section.startIndex = globalIndex;
-                const selected = pool.slice(0, section.count);
-                for (const q of selected) {
-                    examQuestionsFlat.push({ ...q, globalIndex: globalIndex++, sectionLabel: section.label });
-                }
-                section.endIndex = globalIndex - 1;
-                section.actualCount = selected.length;
-            }
-
-            if (examQuestionsFlat.length === 0) {
-                alert(DTM.t('home.no_tests'));
-                return;
-            }
-
-            // Set up test state
-            currentSubjectId = allSubjects.find(s => s.name === fan1Name)?.id || 1;
-            testQuestions = examQuestionsFlat;
-            selectedAnswers = new Array(examQuestionsFlat.length).fill(-1);
-
-            showSection('test');
-            renderFullExam();
-            renderQuestionGrid();
-            startExamTimer();
         }
 
         async function loadDirections() {
@@ -1554,7 +1858,8 @@
             try {
                 const response = await fetch(apiPath('/api/directions'));
                 const directions = await response.json();
-                renderDirections(Array.isArray(directions) ? directions : []);
+                _directionsCache = Array.isArray(directions) ? directions : [];
+                renderDirections(_directionsCache);
             } catch (error) {
                 console.error('Error loading directions:', error);
                 grid.innerHTML = `
@@ -1566,7 +1871,8 @@
             }
         }
 
-        async function selectDirection(directionId, directionName) {
+        async function selectDirection(directionId, directionName, skipPush) {
+            if (!skipPush) pushUrl('/home/' + toSlug(directionName));
             currentDirection = directionId;
             currentDirectionName = directionName;
             const localizedDirectionName = localizeDirectionName(directionName);
@@ -1641,6 +1947,11 @@
             document.getElementById('analyticsSection').style.display = 'none';
             document.getElementById('progressSection').style.display = 'none';
             document.getElementById('profileSection').style.display = 'none';
+            // Hide extra pages
+            document.getElementById('leaderboardPage').classList.remove('active');
+            document.getElementById('testAnalysisPage').classList.remove('active');
+            document.getElementById('dtmResultModal').classList.remove('active');
+            document.getElementById('confirmFinishDialog').classList.remove('active');
 
             // Show selected section
             switch (section) {
@@ -1669,6 +1980,7 @@
 
         // Show profile
         function showProfile() {
+            pushUrl('/profil');
             showSection('profile');
         }
 
@@ -1833,12 +2145,25 @@
             // No-op: exam is started via startExam()
         }
 
-        // Finish test
-        async function finishTest() {
+        // Global: oxirgi DTM natijasi
+        let lastDtmResult = null;
+
+        // "Testni yakunlash" bosilganda - tasdiqlash dialogini ko'rsatish
+        function finishTest() {
+            document.getElementById('confirmFinishDialog').classList.add('active');
+        }
+
+        function closeConfirmDialog() {
+            document.getElementById('confirmFinishDialog').classList.remove('active');
+        }
+
+        // "Ha, yakunlayman" bosilganda - haqiqiy submit
+        async function confirmFinishTest() {
+            closeConfirmDialog();
             clearInterval(timer);
 
-            // Sarflangan vaqtni hisoblash
-            const totalTime = examQuestionsFlat.length > 0 ? 5400 : 300;
+            // Sarflangan vaqtni hisoblash (3 soat = 10800 sekund)
+            const totalTime = 3 * 60 * 60;
             const duration = totalTime - timeLeft;
 
             // DTM endpoint ga yuborish
@@ -1858,6 +2183,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
+                    lastDtmResult = data;
                     showDtmResult(data);
                     return;
                 }
@@ -1865,82 +2191,160 @@
                 console.error('DTM submit error:', error);
             }
 
-            // Fallback: eski usul
-            let correct = 0;
-            testQuestions.forEach((q, i) => {
-                const correctIndex = q.correct ? q.correct.charCodeAt(0) - 65 : -1;
-                if (selectedAnswers[i] === correctIndex) {
-                    correct++;
-                }
-            });
-            const score = Math.round((correct / testQuestions.length) * 100);
-            document.getElementById('modalScore').textContent = score + '%';
-            if (score >= 80) {
-                document.getElementById('modalMessage').textContent = DTM.t('home.modal_excellent');
-            } else if (score >= 60) {
-                document.getElementById('modalMessage').textContent = DTM.t('home.modal_good');
-            } else {
-                document.getElementById('modalMessage').textContent = DTM.t('home.modal_need_work');
-            }
-            document.getElementById('resultModal').classList.add('active');
+            alert('Natijani yuborishda xatolik yuz berdi');
         }
 
-        // DTM natija sahifasini ko'rsatish
+        // DTM natija modalini ko'rsatish
         function showDtmResult(data) {
-            // Ball jadvali
-            document.getElementById('dtmFan1Correct').textContent = data.fan1.correct;
-            document.getElementById('dtmFan2Correct').textContent = data.fan2.correct;
-            document.getElementById('dtmMajburiyCorrect').textContent = data.majburiy.correct;
-            document.getElementById('dtmJamiCorrect').textContent = data.jami.correct + ' ta';
+            // Stats row
+            document.getElementById('rmDuration').textContent = data.duration;
+            document.getElementById('rmCorrect').textContent = data.jami.correct + '/90';
+            document.getElementById('rmPercent').textContent = data.percentage + '%';
+            document.getElementById('rmBall').textContent = data.jami.ball;
 
-            document.getElementById('dtmFan1Ball').textContent = data.fan1.ball;
-            document.getElementById('dtmFan2Ball').textContent = data.fan2.ball;
-            document.getElementById('dtmMajburiyBall').textContent = data.majburiy.ball;
-            document.getElementById('dtmJamiBall').textContent = data.jami.ball + ' ball';
+            // Fan breakdown
+            document.getElementById('rmFan1Score').textContent = data.fan1.correct + '/30';
+            document.getElementById('rmFan1Ball').textContent = data.fan1.ball + ' ball';
+            document.getElementById('rmFan2Score').textContent = data.fan2.correct + '/30';
+            document.getElementById('rmFan2Ball').textContent = data.fan2.ball + ' ball';
+            document.getElementById('rmMajScore').textContent = data.majburiy.correct + '/30';
+            document.getElementById('rmMajBall').textContent = data.majburiy.ball + ' ball';
 
-            // Ishtirokchi jadvali
-            document.getElementById('dtmUserName').textContent = data.user.name;
-            document.getElementById('dtmPercentage').textContent = data.percentage + '%';
-            document.getElementById('dtmDate').textContent = data.date;
-            document.getElementById('dtmDuration').textContent = data.duration;
-
-            // Savol gridi (90 ta - yashil/qizil)
-            const grid = document.getElementById('dtmQuestionGrid');
-            let html = '';
-            for (let i = 0; i < data.questionResults.length; i++) {
-                const isCorrect = data.questionResults[i];
-                const bgColor = isCorrect ? '#c8e6c9' : '#ffcdd2';
-                const textColor = isCorrect ? '#2e7d32' : '#c62828';
-                html += `<div style="
-                    width: 36px; height: 36px;
-                    display: flex; align-items: center; justify-content: center;
-                    background: ${bgColor}; color: ${textColor};
-                    border-radius: 4px; font-size: 13px; font-weight: 600;
-                    cursor: default;
-                ">${i + 1}</div>`;
-            }
-            grid.innerHTML = html;
-
-            // Test sahifasini yashirish, natija sahifasini ko'rsatish
-            document.getElementById('testSection').style.display = 'none';
-            document.getElementById('dtmResultPage').style.display = 'block';
-
-            // Boshqa sectionlarni yashirish
+            // Test sahifasini yashirish
+            document.getElementById('testSection').classList.remove('active');
             document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-            document.querySelector('.sidebar')?.style.setProperty('display', 'none');
+
+            // Modalni ko'rsatish
+            document.getElementById('dtmResultModal').classList.add('active');
         }
 
-        // DTM natija sahifasini yopish
-        function closeDtmResult() {
-            document.getElementById('dtmResultPage').style.display = 'none';
-            showSection('services');
-            document.querySelector('.sidebar')?.style.removeProperty('display');
+        // Natijalar jadvali (leaderboard)
+        // Leaderboard - internal (no URL push)
+        async function showLeaderboardDirect() {
+            document.getElementById('dtmResultModal').classList.remove('active');
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById('testSection').classList.remove('active');
+            document.getElementById('testAnalysisPage').classList.remove('active');
+
+            const lbPage = document.getElementById('leaderboardPage');
+            lbPage.classList.add('active');
+
+            try {
+                const token = localStorage.getItem('token');
+                const resp = await fetch(apiPath('/api/dtm-test/leaderboard'), {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await resp.json();
+
+                const tbody = document.getElementById('lbBody');
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7">Natijalar topilmadi</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(r => {
+                    const ago = getTimeAgo(r.finishedAt);
+                    return `<tr>
+                        <td>${r.rank}</td>
+                        <td style="text-align: left; padding-left: 16px;">${r.name}</td>
+                        <td>${r.fan1Ball}</td>
+                        <td>${r.fan2Ball}</td>
+                        <td>${r.fan3Ball}</td>
+                        <td><strong>${r.totalBall}</strong></td>
+                        <td>${ago}</td>
+                    </tr>`;
+                }).join('');
+            } catch (e) {
+                console.error('Leaderboard error:', e);
+                document.getElementById('lbBody').innerHTML = '<tr><td colspan="7">Xatolik yuz berdi</td></tr>';
+            }
         }
 
-        // Close modal (eski modal uchun)
-        function closeModal() {
-            document.getElementById('resultModal').classList.remove('active');
-            showSection('services');
+        async function showLeaderboard() {
+            pushUrl('/natijalar-jadvali');
+            await showLeaderboardDirect();
+        }
+
+        function getTimeAgo(isoStr) {
+            const diff = Date.now() - new Date(isoStr).getTime();
+            const min = Math.floor(diff / 60000);
+            if (min < 1) return 'hozirgina';
+            if (min < 60) return min + ' daq. oldin';
+            const hr = Math.floor(min / 60);
+            if (hr < 24) return hr + ' soat oldin';
+            const days = Math.floor(hr / 24);
+            return days + ' kun oldin';
+        }
+
+        function closeLeaderboard() {
+            document.getElementById('leaderboardPage').classList.remove('active');
+            document.getElementById('dtmResultModal').classList.add('active');
+            pushUrl('/test');
+        }
+
+        // Test tahlili - internal (no URL push)
+        function showTestAnalysisDirect() {
+            if (!lastDtmResult) return;
+            document.getElementById('dtmResultModal').classList.remove('active');
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById('testSection').classList.remove('active');
+            document.getElementById('leaderboardPage').classList.remove('active');
+
+            const taPage = document.getElementById('testAnalysisPage');
+            taPage.classList.add('active');
+
+            const taBody = document.getElementById('taBody');
+            const data = lastDtmResult;
+            let html = '';
+
+            examQuestionsFlat.forEach((q, idx) => {
+                const isCorrect = data.questionResults[idx];
+                const correctLetter = data.correctLetters ? data.correctLetters[idx] : null;
+                const userLetter = data.userLetters ? data.userLetters[idx] : null;
+                const keys = ['A', 'B', 'C', 'D'];
+
+                html += `<div class="ta-q ${isCorrect ? 'ok' : 'err'}">
+                    <div class="ta-head">
+                        <span class="ta-num">${idx + 1}-savol</span>
+                        <span class="ta-badge ${isCorrect ? 'ok' : 'err'}">${isCorrect ? "To'g'ri" : "Noto'g'ri"}</span>
+                    </div>
+                    <div class="ta-text">${q.question}</div>
+                    <div class="ta-opts">`;
+
+                keys.forEach(key => {
+                    let cls = '';
+                    if (key === correctLetter && key === userLetter) {
+                        cls = 'correct-ans';
+                    } else if (key === correctLetter) {
+                        cls = 'correct-ans';
+                    } else if (key === userLetter) {
+                        cls = 'user-wrong';
+                    }
+                    html += `<div class="ta-opt ${cls}"><strong>${key})</strong> ${q[key] || ''}</div>`;
+                });
+
+                html += `</div></div>`;
+            });
+
+            taBody.innerHTML = html;
+        }
+
+        function showTestAnalysis() {
+            pushUrl('/test-tahlili');
+            showTestAnalysisDirect();
+        }
+
+        function closeTestAnalysis() {
+            document.getElementById('testAnalysisPage').classList.remove('active');
+            document.getElementById('dtmResultModal').classList.add('active');
+            pushUrl('/test');
+        }
+
+        // Testdan chiqish - exam form sahifasiga qaytish
+        function exitTest() {
+            document.getElementById('dtmResultModal').classList.remove('active');
+            lastDtmResult = null;
+            goHome();
         }
 
         // Toggle theme (dark/light mode)
@@ -1986,7 +2390,7 @@
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            window.location.href = '/login.html';
+            window.location.href = '/login';
         }
     </script>
 </body>

@@ -9,4 +9,46 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: "index.html",
+        home: "home.html",
+        login: "login.html",
+        signup: "signup.html",
+      },
+    },
+  },
+  plugins: [
+    {
+      name: "spa-clean-urls",
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          const url = req.url.split("?")[0];
+          // Static files, API, Vite internal - skip
+          if (
+            url.includes(".") ||
+            url.startsWith("/api") ||
+            url.startsWith("/@") ||
+            url.startsWith("/node_modules") ||
+            url.startsWith("/src")
+          ) {
+            return next();
+          }
+          // Route mapping
+          if (url === "/login") {
+            req.url = "/login.html";
+          } else if (url === "/signup") {
+            req.url = "/signup.html";
+          } else if (url === "/" || url === "") {
+            // index.html - default
+          } else {
+            // All app routes -> home.html
+            req.url = "/home.html";
+          }
+          next();
+        });
+      },
+    },
+  ],
 });

@@ -862,7 +862,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function initGoogleAuth() {
     const path = window.location.pathname.toLowerCase();
-    const isAuthPage = path.endsWith('/login.html') || path.endsWith('/signup.html');
+    const isAuthPage = path.endsWith('/login.html') || path.endsWith('/signup.html') || path.endsWith('/login') || path.endsWith('/signup');
     if (!isAuthPage) return;
 
     const loginContainer = document.getElementById('googleLoginButton');
@@ -965,7 +965,7 @@ async function handleGoogleCredential(response) {
 
         localStorage.setItem('token', data.token || data.accessToken);
         localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = '/home.html';
+        window.location.href = '/home';
     } catch (error) {
         console.error('Google auth error:', error);
         alert(t('alert.google_login_error'));
@@ -994,7 +994,7 @@ async function handleLogin(e) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             alert(t('alert.login_success'));
-            window.location.href = '/home.html';
+            window.location.href = '/home';
         } else {
             alert(data.error || data.message || t('alert.generic_error'));
         }
@@ -1039,7 +1039,7 @@ async function handleSignup(e) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             alert(t('alert.signup_success'));
-            window.location.href = '/home.html';
+            window.location.href = '/home';
         } else {
             alert(data.error || data.message || t('alert.generic_error'));
         }
@@ -1053,7 +1053,7 @@ async function handleSignup(e) {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = '/login.html';
+    window.location.href = '/login';
 }
 
 // Check if user is logged in
@@ -1075,7 +1075,7 @@ function getToken() {
 // Protect routes
 function requireAuth() {
     if (!isLoggedIn()) {
-        window.location.href = '/login.html';
+        window.location.href = '/login';
         return false;
     }
     return true;
