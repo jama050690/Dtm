@@ -1520,10 +1520,7 @@
             grid.innerHTML = '<p style="color: var(--text-muted);">Natijalar yuklanmoqda...</p>';
 
             try {
-                const token = localStorage.getItem('token');
-                const resp = await fetch(apiPath('/api/results'), {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const resp = await fetchWithToken(apiPath('/api/results'));
                 const data = await resp.json();
 
                 if (!data || data.length === 0) {
@@ -1638,11 +1635,7 @@
         // Load user data
         async function loadUserData() {
             try {
-                const response = await fetch(apiPath('/api/stats'), {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+                const response = await fetchWithToken(apiPath('/api/stats'));
                 const stats = await response.json();
                 document.getElementById('headerCoins').textContent = stats.coins || 0;
             } catch (error) {
@@ -1806,10 +1799,7 @@
 
         async function loadExamStats(directionId) {
             try {
-                const token = localStorage.getItem('token');
-                const response = await fetch(apiPath('/api/stats'), {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const response = await fetchWithToken(apiPath('/api/stats'));
                 const stats = await response.json();
                 const el = (id) => document.getElementById(id);
                 if (el('examParticipants')) el('examParticipants').textContent = (stats.totalTests || 0).toLocaleString();
@@ -1831,11 +1821,8 @@
 
         async function startExam(directionId) {
             // Yangi DTM endpoint dan 90 ta savolni olish
-            const token = localStorage.getItem('token');
             try {
-                const resp = await fetch(apiPath('/api/dtm-test/start'), {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const resp = await fetchWithToken(apiPath('/api/dtm-test/start'));
                 const data = await resp.json();
 
                 if (!resp.ok || !data.questions || data.questions.length === 0) {
@@ -1944,17 +1931,45 @@
             return `${base}${path}`;
         }
 
+        // 401 bo'lganda refresh token bilan yangilash
+        async function fetchWithToken(url, options = {}) {
+            const token = localStorage.getItem('token');
+            const headers = { ...options.headers };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch(url, { ...options, headers });
+
+            if (response.status === 401) {
+                const refreshToken = localStorage.getItem('refreshToken');
+                if (!refreshToken) { window.DTM && window.DTM.logout(); return response; }
+
+                try {
+                    const refRes = await fetch(apiPath('/api/auth/refresh'), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ refreshToken })
+                    });
+                    if (!refRes.ok) { window.DTM && window.DTM.logout(); return response; }
+                    const data = await refRes.json();
+                    if (data.accessToken) localStorage.setItem('token', data.accessToken);
+                    if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
+                    headers['Authorization'] = `Bearer ${data.accessToken}`;
+                    return fetch(url, { ...options, headers });
+                } catch {
+                    window.DTM && window.DTM.logout();
+                    return response;
+                }
+            }
+            return response;
+        }
+
         // Select subject and load tests
         async function selectSubject(subjectId, subjectName) {
             currentSubjectId = subjectId;
             document.getElementById('selectedSubjectName').textContent = subjectName;
 
             try {
-                const response = await fetch(apiPath(`/api/tests/${subjectId}`), {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+                const response = await fetchWithToken(apiPath(`/api/tests/${subjectId}`));
                 testQuestions = await response.json();
 
                 if (testQuestions.length > 0) {
@@ -2018,14 +2033,11 @@
 
         // Load profile data
         async function loadProfileData() {
-            const token = localStorage.getItem('token');
-            if (!token) return;
+            if (!localStorage.getItem('token')) return;
 
             try {
                 // Get user data
-                const userRes = await fetch(apiPath('/api/auth/me'), {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const userRes = await fetchWithToken(apiPath('/api/auth/me'));
                 const user = await userRes.json();
 
                 document.getElementById('profileName').textContent = user.name || 'Foydalanuvchi';
@@ -2034,9 +2046,7 @@
                 document.getElementById('profileCoins').textContent = user.coins || 0;
 
                 // Get stats
-                const statsRes = await fetch(apiPath('/api/stats'), {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const statsRes = await fetchWithToken(apiPath('/api/stats'));
                 const stats = await statsRes.json();
 
                 document.getElementById('profileTotalTests').textContent = stats.totalTests || 0;
@@ -2044,9 +2054,7 @@
                 document.getElementById('profileTotalScore').textContent = stats.totalScore || 0;
 
                 // Get recent results
-                const resultsRes = await fetch(apiPath('/api/results'), {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const resultsRes = await fetchWithToken(apiPath('/api/results'));
                 const results = await resultsRes.json();
 
                 const recentDiv = document.getElementById('profileRecentActivity');
@@ -2201,12 +2209,9 @@
 
             // DTM endpoint ga yuborish
             try {
-                const response = await fetch(apiPath('/api/dtm-test/submit'), {
+                const response = await fetchWithToken(apiPath('/api/dtm-test/submit'), {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         answers: selectedAnswers,
                         duration: duration
@@ -2263,10 +2268,7 @@
             lbPage.classList.add('active');
 
             try {
-                const token = localStorage.getItem('token');
-                const resp = await fetch(apiPath('/api/dtm-test/leaderboard'), {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const resp = await fetchWithToken(apiPath('/api/dtm-test/leaderboard'));
                 const data = await resp.json();
 
                 const tbody = document.getElementById('lbBody');

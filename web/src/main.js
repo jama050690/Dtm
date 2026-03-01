@@ -964,6 +964,7 @@ async function handleGoogleCredential(response) {
         }
 
         localStorage.setItem('token', data.token || data.accessToken);
+        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
         localStorage.setItem('user', JSON.stringify(data.user));
         window.location.href = '/home';
     } catch (error) {
@@ -991,7 +992,8 @@ async function handleLogin(e) {
         const data = await response.json();
 
         if (response.ok) {
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', data.token || data.accessToken);
+            if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
             localStorage.setItem('user', JSON.stringify(data.user));
             alert(t('alert.login_success'));
             window.location.href = '/home';
@@ -1036,7 +1038,8 @@ async function handleSignup(e) {
         const data = await response.json();
 
         if (response.ok) {
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', data.token || data.accessToken);
+            if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
             localStorage.setItem('user', JSON.stringify(data.user));
             alert(t('alert.signup_success'));
             window.location.href = '/home';
@@ -1052,6 +1055,7 @@ async function handleSignup(e) {
 // Logout function
 function logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     window.location.href = '/login';
 }
@@ -1081,6 +1085,33 @@ function requireAuth() {
     return true;
 }
 
+// Refresh token bilan access tokenni yangilash
+async function refreshAccessToken() {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return null;
+
+    try {
+        const response = await fetch(`${API_URL}/api/auth/refresh`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken })
+        });
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        if (data.accessToken) {
+            localStorage.setItem('token', data.accessToken);
+        }
+        if (data.refreshToken) {
+            localStorage.setItem('refreshToken', data.refreshToken);
+        }
+        return data.accessToken;
+    } catch {
+        return null;
+    }
+}
+
 // API helper functions
 async function fetchWithAuth(url, options = {}) {
     const token = getToken();
@@ -1097,6 +1128,16 @@ async function fetchWithAuth(url, options = {}) {
         ...options,
         headers
     });
+
+    // 401 bo'lsa refresh token bilan yangilash
+    if (response.status === 401) {
+        const newToken = await refreshAccessToken();
+        if (newToken) {
+            headers['Authorization'] = `Bearer ${newToken}`;
+            return fetch(url, { ...options, headers });
+        }
+        logout();
+    }
 
     return response;
 }
