@@ -1,0 +1,483 @@
+﻿<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin kabinet - DTM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+  <style>
+    :root{--bg:#eef1f5;--card:#fff;--b:#d9e0ea;--m:#64748b;--p:#2f80ed}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:#111827;font-family:"Manrope",sans-serif}
+    .top{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--b);z-index:9}
+    .topin{max-width:1320px;margin:0 auto;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+    .brand{font-weight:700}.btn{border:none;border-radius:8px;padding:10px 14px;cursor:pointer}
+    .btnl{background:#f3f4f6}.btnp{background:var(--p);color:#fff;font-weight:700}
+    .wrap{max-width:1320px;margin:16px auto;padding:0 16px;display:grid;grid-template-columns:320px 1fr;gap:18px}
+    .card{background:var(--card);border:1px solid var(--b);padding:22px}
+    .side{position:sticky;top:70px}
+    .av{width:92px;height:92px;border-radius:50%;margin:0 auto 14px;background:#cbd5e1;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700}
+    .name,.phone{text-align:center}.name{font-size:34px;font-weight:700}.phone{font-size:24px;color:var(--p);margin:8px 0 18px}
+    .stt{text-align:center;color:#9ca3af;font-size:22px;margin:8px 0}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;border-bottom:1px solid var(--b);padding-bottom:14px}
+    .sv{font-size:34px;font-weight:700}.sl{font-size:18px;color:var(--m)}
+    .menu{display:flex;flex-direction:column;gap:6px;margin-top:14px}.mi{border:none;background:transparent;text-align:left;font-size:28px;padding:8px 4px;cursor:pointer}
+    .mi.a{color:var(--p);font-weight:700}
+    .help{margin-top:18px;border:1px solid var(--b);background:#f8fafc;padding:12px;font-size:20px}
+    .h{margin:0 0 16px;font-size:42px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+    .f.fu{grid-column:1/-1}.f label{display:block;margin-bottom:6px;font-size:28px}
+    .f input,.f select{width:100%;min-height:58px;border:1px solid #cfd8e3;background:#f6f8fb;padding:0 14px;font-size:28px}
+    .chk{display:flex;align-items:center;gap:10px;font-size:28px}
+    .foot{margin-top:16px;display:flex;justify-content:flex-end}
+    .status{min-height:26px;margin:0 0 12px;font-size:20px;color:#065f46}.status.e{color:#b91c1c}
+    .mut{font-size:26px;color:#64748b;line-height:1.5}
+    .results-view .h{margin-bottom:20px}
+    .results-head{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)150px;gap:14px;padding:0 12px 12px;font-size:34px;font-weight:700;color:#334155}
+    .results-body{display:flex;flex-direction:column;gap:12px}
+    .result-row{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)150px;gap:14px;align-items:center;background:#f1f5f9;padding:16px 12px;border:1px solid #e2e8f0}
+    .result-test-title{color:#2563eb;font-size:34px;line-height:1.25}
+    .result-test-sub{color:#64748b;font-size:34px;line-height:1.25;margin-top:4px}
+    .result-score{font-size:34px;line-height:1.3;color:#334155}
+    .result-score-sub{font-size:32px;color:#64748b;line-height:1.2;margin-top:4px}
+    .result-time{text-align:right;font-size:34px;color:#475569}
+    .results-empty{padding:18px 10px;color:#64748b;font-size:28px}
+    @media(max-width:1100px){.wrap{grid-template-columns:1fr}.side{position:static}}
+    @media(max-width:760px){.h{font-size:28px}.grid{grid-template-columns:1fr}.f label{font-size:17px}.f input,.f select{font-size:17px;min-height:48px}.name{font-size:24px}.phone{font-size:18px}.mi{font-size:18px}.sv{font-size:24px}.sl,.help,.mut,.status{font-size:14px}.results-head{display:none}.result-row{grid-template-columns:1fr}.result-test-title{font-size:18px}.result-test-sub{font-size:16px}.result-score{font-size:17px}.result-score-sub{font-size:15px}.result-time{text-align:left;font-size:16px}.results-empty{font-size:15px}}
+  </style>
+</head>
+<body>
+  <header class="top"><div class="topin"><div class="brand">DTM Admin Kabinet</div><div><a class="btn btnl" href="/home">Mening sahifam</a> <button class="btn btnl" id="logoutTop">Chiqish</button></div></div></header>
+  <main class="wrap">
+    <aside class="card side">
+      <div class="av" id="av">A</div><div class="name" id="nm">Admin</div><div class="phone" id="ph">+998 -- --- -- --</div>
+      <div class="stt">NATIJALAR</div>
+      <div class="stats"><div><div class="sv" id="sa">0</div><div class="sl">Testlar</div></div><div><div class="sv" id="ss">0</div><div class="sl">Fanlar</div></div><div><div class="sv" id="su">0</div><div class="sl">Users</div></div></div>
+      <div class="menu"><button class="mi" id="goRes">Natijalarim</button><button class="mi a" id="goSet">Sozlamalar</button><button class="mi" id="logoutSide">Chiqish</button></div>
+      <div class="help">Savollaringiz bormi?<br><a href="#">Onlayn murojaat</a></div>
+    </aside>
+    <section id="settingsView" style="display:flex;flex-direction:column;gap:16px">
+      <section class="card" id="secSet">
+        <h2 class="h">Sozlamalar</h2><p class="status" id="s1"></p>
+        <form id="f1">
+          <div class="grid">
+            <div class="f"><label for="fullName">Ism-sharifingiz</label><input id="fullName" type="text" placeholder="Ism familiya"></div>
+            <div class="f"><label for="phone">Mobil raqamingiz</label><input id="phone" type="text" placeholder="90 123-45-67"></div>
+            <div class="f fu"><label class="chk"><input id="pwToggle" type="checkbox"><span>Parolni o'zgartirish</span></label></div>
+            <div class="f"><label for="newPw">Yangi parol</label><input id="newPw" type="password" disabled></div>
+            <div class="f"><label for="cfPw">Parol tasdigi</label><input id="cfPw" type="password" disabled></div>
+          </div>
+          <div class="foot"><button class="btn btnp" type="submit">Saqlash</button></div>
+        </form>
+      </section>
+      <section class="card" id="secExtra">
+        <h2 class="h">Qo'shimcha ma'lumotlar</h2><p class="status" id="s2"></p>
+        <form id="f2">
+          <div class="grid">
+            <div class="f"><label for="region">Viloyat</label><select id="region"></select></div>
+            <div class="f"><label for="district">O'qish yoki yashash hududi</label><select id="district"></select></div>
+            <div class="f fu"><label for="eth">Toifangiz</label><select id="eth"><option value="">Toifani tanlang</option><option value="Umumiy">Umumiy</option><option value="Abituriyent">Abituriyent</option><option value="Maktab o'quvchisi">Maktab o'quvchisi</option></select></div>
+            <div class="f"><label for="age">Yoshingiz</label><input id="age" type="number" min="10" max="99" placeholder="Yoshingiz"></div>
+            <div class="f"><label for="gender">Jinsingiz</label><select id="gender"><option value="">Jinsingizni tanlang</option><option value="Erkak">Erkak</option><option value="Ayol">Ayol</option></select></div>
+          </div>
+          <div class="foot"><button class="btn btnp" type="submit">Saqlash</button></div>
+        </form>
+      </section>
+      <section class="card" id="secTg"><h2 class="h">Telegram Profil</h2><div class="grid"><div class="f"><label for="tgUser">Telegram User</label><input id="tgUser" readonly value="-"></div><div class="f"><label for="tgId">Telegram ID</label><input id="tgId" readonly value="-"></div></div></section>
+      <section class="card"><h2 class="h">Akkountni o'chirish</h2><p class="mut">Tizimda foydalanuvchi akkountini o'chirish uchun <a href="#" id="delLink">ushbu havolaga</a> bosing. Diqqat! Ushbu harakat natijasida akkount va uning ma'lumotlari qayta tiklanmaydi.</p></section>
+    </section>
+    <section class="card results-view" id="resultsView" style="display:none">
+      <h2 class="h">DTM Diagnostik testlar</h2>
+      <div class="results-head">
+        <div>Test</div>
+        <div>Natija</div>
+        <div style="text-align:right">Vaqt</div>
+      </div>
+      <div class="results-body" id="resultsBody"></div>
+    </section>
+  </main>  <script>
+    const EK = 'dtm_admin_extra_v1';
+    const R = {
+      "Toshkent shahri": ["Chilonzor tumani", "Yunusobod tumani", "Mirzo Ulugbek tumani"],
+      "Toshkent viloyati": ["Chirchiq", "Olmaliq", "Yangiyol"],
+      "Samarqand viloyati": ["Samarqand shahri", "Urgut", "Kattaqorgon"],
+      "Buxoro viloyati": ["Buxoro shahri", "Gijduvon", "Kogon"],
+      "Andijon viloyati": ["Andijon shahri", "Asaka", "Shahrixon"],
+      "Fargona viloyati": ["Fargona shahri", "Qoqon", "Margilon"],
+      "Namangan viloyati": ["Namangan shahri", "Pop", "Kosonsoy"],
+      "Qoraqalpogiston Respublikasi": ["Nukus shahri", "Beruniy", "To'rtkol"]
+    };
+
+    const rg = document.getElementById('region');
+    const ds = document.getElementById('district');
+    const s1 = document.getElementById('s1');
+    const s2 = document.getElementById('s2');
+    const settingsView = document.getElementById('settingsView');
+    const resultsView = document.getElementById('resultsView');
+    const resultsBody = document.getElementById('resultsBody');
+    const goResBtn = document.getElementById('goRes');
+    const goSetBtn = document.getElementById('goSet');
+
+    const st = (el, m, e = false) => {
+      el.textContent = m;
+      el.classList.toggle('e', e);
+    };
+
+    const out = () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      location.href = '/login';
+    };
+
+    const payload = (t) => {
+      try {
+        return JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      } catch {
+        return null;
+      }
+    };
+
+    const refresh = async () => {
+      const r = localStorage.getItem('refreshToken');
+      if (!r) return null;
+      try {
+        const x = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken: r })
+        });
+        if (!x.ok) return null;
+        const d = await x.json();
+        if (d.accessToken) localStorage.setItem('token', d.accessToken);
+        if (d.refreshToken) localStorage.setItem('refreshToken', d.refreshToken);
+        return d.accessToken || null;
+      } catch {
+        return null;
+      }
+    };
+
+    const fwt = async (u, o = {}) => {
+      let t = localStorage.getItem('token');
+      const h = { ...(o.headers || {}) };
+      if (o.body && !h['Content-Type']) h['Content-Type'] = 'application/json';
+      if (t) h.Authorization = `Bearer ${t}`;
+      let r = await fetch(u, { ...o, headers: h });
+      if (r.status !== 401) return r;
+
+      t = await refresh();
+      if (!t) {
+        out();
+        return r;
+      }
+      h.Authorization = `Bearer ${t}`;
+      return fetch(u, { ...o, headers: h });
+    };
+
+    const ini = (n) => {
+      const p = String(n || '').trim().split(/\s+/).filter(Boolean);
+      return p.length > 1 ? (p[0][0] + p[1][0]).toUpperCase() : (p[0]?.[0] || 'A').toUpperCase();
+    };
+
+    const split = (n) => {
+      const p = String(n || '').trim().split(/\s+/).filter(Boolean);
+      if (!p.length) return { firstName: '', lastName: '' };
+      const f = p.shift();
+      return { firstName: f, lastName: p.join(' ') };
+    };
+
+    const setR = (s) => {
+      rg.innerHTML = '';
+      Object.keys(R).forEach((k) => {
+        const o = document.createElement('option');
+        o.value = k;
+        o.textContent = k;
+        if (k === s) o.selected = true;
+        rg.appendChild(o);
+      });
+    };
+
+    const setD = (r, s = '') => {
+      ds.innerHTML = '';
+      (R[r] || []).forEach((k) => {
+        const o = document.createElement('option');
+        o.value = k;
+        o.textContent = k;
+        if (k === s) o.selected = true;
+        ds.appendChild(o);
+      });
+    };
+
+    const loadExtra = () => {
+      try {
+        const e = JSON.parse(localStorage.getItem(EK) || '{}');
+        if (e.region && R[e.region]) {
+          rg.value = e.region;
+          setD(e.region, e.district || '');
+        }
+        document.getElementById('eth').value = e.eth || '';
+        document.getElementById('age').value = e.age || '';
+        document.getElementById('gender').value = e.gender || '';
+      } catch {
+        // ignore local parse errors
+      }
+    };
+
+    const saveExtra = () => {
+      const e = {
+        region: rg.value,
+        district: ds.value,
+        eth: document.getElementById('eth').value,
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value
+      };
+      localStorage.setItem(EK, JSON.stringify(e));
+      return e;
+    };
+
+    async function ensureAdmin() {
+      const t = localStorage.getItem('token');
+      if (!t) {
+        location.href = '/login';
+        return false;
+      }
+      const p = payload(t);
+      if (p?.isAdmin === true) return true;
+
+      try {
+        const r = await fwt('/api/users/me');
+        if (!r.ok) {
+          location.href = '/home';
+          return false;
+        }
+        const u = await r.json();
+        if (!u.isAdmin) {
+          location.href = '/home';
+          return false;
+        }
+        return true;
+      } catch {
+        location.href = '/home';
+        return false;
+      }
+    }
+
+    function toScoreFormula(dtmResult) {
+      if (!dtmResult?.fan1 || !dtmResult?.fan2 || !dtmResult?.majburiy || !dtmResult?.jami) {
+        return null;
+      }
+      const f1 = Number(dtmResult.fan1.correct || 0);
+      const f2 = Number(dtmResult.fan2.correct || 0);
+      const f3 = Number(dtmResult.majburiy.correct || 0);
+      const totalBall = Number(dtmResult.jami.ball || 0);
+      const totalText = Number.isInteger(totalBall) ? String(totalBall) : totalBall.toFixed(1);
+      return `${f1}x3.1+${f2}x2.1+${f3}x1.1=${totalText}`;
+    }
+
+    function toMinuteLabel(isoDate) {
+      const ts = new Date(isoDate).getTime();
+      if (Number.isNaN(ts)) return '-';
+      const min = Math.max(0, Math.floor((Date.now() - ts) / 60000));
+      return `${min} daq.`;
+    }
+
+    function setMenu(mode) {
+      goSetBtn.classList.toggle('a', mode === 'settings');
+      goResBtn.classList.toggle('a', mode === 'results');
+    }
+
+    function showSettingsView() {
+      settingsView.style.display = 'flex';
+      resultsView.style.display = 'none';
+      setMenu('settings');
+    }
+
+    async function loadResultsModule() {
+      resultsBody.innerHTML = '<div class="results-empty">Natijalar yuklanmoqda...</div>';
+      try {
+        const res = await fwt('/api/results');
+        if (!res.ok) {
+          resultsBody.innerHTML = '<div class="results-empty">Natijalarni yuklashda xatolik</div>';
+          return;
+        }
+
+        const rows = await res.json();
+        const myRows = (Array.isArray(rows) ? rows : [])
+          .filter((r) => Number(r.totalQuestions) === 90 && r.id)
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        if (!myRows.length) {
+          resultsBody.innerHTML = '<div class="results-empty">Hozircha natijalar topilmadi</div>';
+          return;
+        }
+
+        const withDetails = await Promise.all(
+          myRows.map(async (r) => {
+            try {
+              const detailRes = await fwt(`/api/dtm-test/result/${r.id}`);
+              if (!detailRes.ok) return { row: r, formula: `${r.score}/${r.totalQuestions}` };
+              const detail = await detailRes.json();
+              const formula = toScoreFormula(detail) || `${r.score}/${r.totalQuestions}`;
+              return { row: r, formula };
+            } catch {
+              return { row: r, formula: `${r.score}/${r.totalQuestions}` };
+            }
+          })
+        );
+
+        resultsBody.innerHTML = withDetails.map(({ row, formula }) => `
+          <div class="result-row">
+            <div>
+              <div class="result-test-title">DTM online test topshirish 2026</div>
+              <div class="result-test-sub">Tarix / Chet tili / Majburiy fanlar</div>
+            </div>
+            <div>
+              <div class="result-score">${formula}</div>
+              <div class="result-score-sub">/</div>
+            </div>
+            <div class="result-time">${toMinuteLabel(row.date)}</div>
+          </div>
+        `).join('');
+      } catch {
+        resultsBody.innerHTML = '<div class="results-empty">Natijalarni yuklashda xatolik</div>';
+      }
+    }
+
+    async function showResultsView() {
+      settingsView.style.display = 'none';
+      resultsView.style.display = 'block';
+      setMenu('results');
+      await loadResultsModule();
+    }
+
+    async function load() {
+      const r = await fwt('/api/users/me');
+      if (!r.ok) throw new Error('me');
+
+      const u = await r.json();
+      const n = [u.firstName, u.lastName].filter(Boolean).join(' ') || u.email || 'Admin';
+      document.getElementById('nm').textContent = n;
+      document.getElementById('ph').textContent = u.phone || 'Telefon kiritilmagan';
+      document.getElementById('av').textContent = ini(n);
+      document.getElementById('fullName').value = n;
+      document.getElementById('phone').value = u.phone || '';
+      document.getElementById('tgUser').value = u.telegramUsername || n;
+      document.getElementById('tgId').value = u.telegramId || '-';
+
+      const sr = await fwt('/api/admin/dtm/stats');
+      if (sr.ok) {
+        const s = await sr.json();
+        document.getElementById('sa').textContent = String(s.attempts || 0);
+        document.getElementById('ss').textContent = String(s.subjects || 0);
+        document.getElementById('su').textContent = String(s.users || 0);
+      }
+    }
+
+    async function saveProfile(e) {
+      e.preventDefault();
+      st(s1, '');
+      const n = document.getElementById('fullName').value.trim();
+      const ph = document.getElementById('phone').value.trim();
+      const sp = split(n);
+      if (!sp.firstName) {
+        st(s1, 'Iltimos, ism-sharifingizni kiriting', true);
+        return;
+      }
+
+      if (document.getElementById('pwToggle').checked) {
+        const a = document.getElementById('newPw').value.trim();
+        const b = document.getElementById('cfPw').value.trim();
+        if (a.length < 8) {
+          st(s1, "Yangi parol kamida 8 belgidan iborat bo'lishi kerak", true);
+          return;
+        }
+        if (a !== b) {
+          st(s1, 'Parol tasdigi mos kelmadi', true);
+          return;
+        }
+      }
+
+      try {
+        const r = await fwt('/api/users/me', {
+          method: 'PUT',
+          body: JSON.stringify({ firstName: sp.firstName, lastName: sp.lastName, phone: ph })
+        });
+        const d = await r.json();
+        if (!r.ok) {
+          st(s1, d.error || "Saqlashda xatolik", true);
+          return;
+        }
+        const fn = [d.firstName, d.lastName].filter(Boolean).join(' ') || n;
+        document.getElementById('nm').textContent = fn;
+        document.getElementById('ph').textContent = d.phone || 'Telefon kiritilmagan';
+        document.getElementById('av').textContent = ini(fn);
+        st(
+          s1,
+          document.getElementById('pwToggle').checked
+            ? "Profil saqlandi. Parolni o'zgartirish hozir forgot-password orqali qilinadi."
+            : "Sozlamalar saqlandi"
+        );
+      } catch {
+        st(s1, "Server bilan bog'lanishda xatolik", true);
+      }
+    }
+
+    async function saveExtraApi(e) {
+      e.preventDefault();
+      st(s2, '');
+      const x = saveExtra();
+      try {
+        const r = await fwt('/api/users/me', {
+          method: 'PUT',
+          body: JSON.stringify({ city: [x.region, x.district].filter(Boolean).join(', ') })
+        });
+        if (!r.ok) {
+          const d = await r.json();
+          st(s2, d.error || "Saqlashda xatolik", true);
+          return;
+        }
+        st(s2, "Qo'shimcha ma'lumotlar saqlandi");
+      } catch {
+        st(s2, "Server bilan bog'lanishda xatolik", true);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      setR('Toshkent shahri');
+      setD('Toshkent shahri');
+      loadExtra();
+
+      document.getElementById('logoutTop').onclick = out;
+      document.getElementById('logoutSide').onclick = out;
+      goSetBtn.onclick = showSettingsView;
+      goResBtn.onclick = showResultsView;
+      document.getElementById('f1').onsubmit = saveProfile;
+      document.getElementById('f2').onsubmit = saveExtraApi;
+      document.getElementById('delLink').onclick = (e) => {
+        e.preventDefault();
+        alert("Akkountni o'chirish funksiyasi hozircha ulanmagan.");
+      };
+      rg.onchange = () => setD(rg.value);
+      document.getElementById('pwToggle').onchange = (e) => {
+        const en = e.target.checked;
+        document.getElementById('newPw').disabled = !en;
+        document.getElementById('cfPw').disabled = !en;
+        if (!en) {
+          document.getElementById('newPw').value = '';
+          document.getElementById('cfPw').value = '';
+        }
+      };
+
+      if (!(await ensureAdmin())) return;
+      try {
+        await load();
+        showSettingsView();
+      } catch {
+        st(s1, "Admin ma'lumotlarini yuklashda xatolik", true);
+      }
+    });
+  </script></body>
+</html>
+

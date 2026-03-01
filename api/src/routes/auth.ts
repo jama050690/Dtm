@@ -559,6 +559,7 @@ export async function authRoutes(app: FastifyInstance) {
           user: {
             id: user.id,
             email: user.email,
+            name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Foydalanuvchi',
             firstName: user.firstName,
             lastName: user.lastName,
             phone: user.phone,
@@ -660,6 +661,7 @@ export async function authRoutes(app: FastifyInstance) {
           user: {
             id: user.id,
             email: user.email,
+            name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Foydalanuvchi',
             firstName: user.firstName,
             lastName: user.lastName,
             phone: user.phone,
@@ -778,6 +780,7 @@ export async function authRoutes(app: FastifyInstance) {
           user: {
             id: user.id,
             email: user.email,
+            name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Foydalanuvchi',
             firstName: user.firstName,
             lastName: user.lastName,
             phone: user.phone,

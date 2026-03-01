@@ -1370,6 +1370,7 @@ export async function dtmRoutes(app: FastifyInstance) {
       });
 
       return results.map((result) => ({
+        id: result.id,
         subjectId: result.subjectId,
         subjectName: result.subject.name,
         score: result.score,

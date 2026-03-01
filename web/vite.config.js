@@ -14,6 +14,7 @@ export default defineConfig({
       input: {
         main: "index.html",
         home: "home.html",
+        admin: "admin.html",
         login: "login.html",
         signup: "signup.html",
       },
@@ -40,6 +41,8 @@ export default defineConfig({
             req.url = "/login.html";
           } else if (url === "/signup") {
             req.url = "/signup.html";
+          } else if (url === "/admin") {
+            req.url = "/admin.html";
           } else if (url === "/" || url === "") {
             // index.html - default
           } else {

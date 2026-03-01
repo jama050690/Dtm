@@ -1196,6 +1196,13 @@
                                     </svg>
                                     Shaxsiy kabinet
                                 </a>
+                                <a id="adminPanelLink" href="/admin" style="display:none;" onclick="closeUserDropdown()">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                        <path d="M9 9h6M9 15h6M9 12h6"></path>
+                                    </svg>
+                                    Admin panel
+                                </a>
                                 <a href="#" onclick="showSection('results'); closeUserDropdown(); return false;">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M9 11l3 3L22 4"></path>
@@ -1720,6 +1727,17 @@
             _isPop = false;
         });
 
+        function parseTokenPayload(token) {
+            try {
+                const payloadBase64 = token.split('.')[1];
+                if (!payloadBase64) return null;
+                const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+                return JSON.parse(payloadJson);
+            } catch {
+                return null;
+            }
+        }
+
         // All subjects fetched from API, stored for lookup
         let allSubjectsCache = [];
 
@@ -1735,11 +1753,35 @@
                 return;
             }
 
-            const user = JSON.parse(userStr);
-            const fullName = user.name || 'Foydalanuvchi';
+            let user = JSON.parse(userStr);
+            const tokenPayload = parseTokenPayload(token);
+            if (tokenPayload && typeof tokenPayload.isAdmin === 'boolean' && user.isAdmin === undefined) {
+                user.isAdmin = tokenPayload.isAdmin;
+            }
+
+            // API dan yangi user ma'lumotlarini olish
+            try {
+                const meRes = await fetchWithToken(apiPath('/api/auth/me'));
+                if (meRes.ok) {
+                    const freshUser = await meRes.json();
+                    user = { ...user, ...freshUser };
+                    if (tokenPayload && typeof tokenPayload.isAdmin === 'boolean') {
+                        user.isAdmin = tokenPayload.isAdmin;
+                    }
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+            } catch (e) {
+                console.error('User fetch error:', e);
+            }
+
+            const fullName = user.name || user.firstName || 'Foydalanuvchi';
             document.getElementById('userName').textContent = fullName;
             document.getElementById('welcomeName').textContent = fullName;
             document.getElementById('userAvatar').textContent = fullName.charAt(0).toUpperCase();
+            if (user.isAdmin) {
+                const adminLink = document.getElementById('adminPanelLink');
+                if (adminLink) adminLink.style.display = 'flex';
+            }
 
             await loadUserData();
             await loadDirections();
