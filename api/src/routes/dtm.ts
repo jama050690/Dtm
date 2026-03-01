@@ -49,6 +49,147 @@ const DTM_SCORING = {
   majburiy: 1.1,  // majburiy fanlar: har bir to'g'ri javobga 1.1 ball
 };
 
+type LeaderboardItem = {
+  rank: number;
+  name: string;
+  fan1Ball: number;
+  fan2Ball: number;
+  fan3Ball: number;
+  totalBall: number;
+  finishedAt: string;
+};
+
+type LeaderboardCache = {
+  data: LeaderboardItem[];
+  nextRefreshAt: number;
+};
+
+const LEADERBOARD_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+let leaderboardCache: LeaderboardCache | null = null;
+
+function indexToLetter(idx: number): string {
+  if (idx === 0) return "A";
+  if (idx === 1) return "B";
+  if (idx === 2) return "C";
+  return "D";
+}
+
+function calcDtmBalls(
+  userAnswers: number[],
+  correctAnswers: Map<number, string>
+): { fan1Ball: number; fan2Ball: number; fan3Ball: number; totalBall: number } {
+  const calcSection = (start: number, count: number, pointsPerQ: number) => {
+    let correct = 0;
+    for (let i = start; i < start + count; i++) {
+      const correctLetter = correctAnswers.get(i + 1);
+      const userLetter =
+        userAnswers[i] !== undefined && userAnswers[i] !== -1
+          ? indexToLetter(userAnswers[i])
+          : null;
+      if (userLetter === correctLetter) correct++;
+    }
+    return Math.round(correct * pointsPerQ * 10) / 10;
+  };
+
+  const fan1Ball = calcSection(0, 30, DTM_SCORING.fan1);
+  const fan2Ball = calcSection(30, 30, DTM_SCORING.fan2);
+  const majOnaBall = calcSection(60, 10, DTM_SCORING.majburiy);
+  const majMatBall = calcSection(70, 10, DTM_SCORING.majburiy);
+  const majTarixBall = calcSection(80, 10, DTM_SCORING.majburiy);
+  const fan3Ball = Math.round((majOnaBall + majMatBall + majTarixBall) * 10) / 10;
+  const totalBall = Math.round((fan1Ball + fan2Ball + fan3Ball) * 10) / 10;
+
+  return { fan1Ball, fan2Ball, fan3Ball, totalBall };
+}
+
+async function buildLeaderboardSnapshot(): Promise<LeaderboardItem[]> {
+  const correctAnswers = parseJavoblar();
+
+  const results = await prisma.testResult.findMany({
+    where: { totalQuestions: 90 },
+    orderBy: { createdAt: "desc" },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+    },
+  });
+
+  const bestByUser = new Map<
+    string,
+    {
+      userId: string;
+      name: string;
+      fan1Ball: number;
+      fan2Ball: number;
+      fan3Ball: number;
+      totalBall: number;
+      finishedAt: string;
+    }
+  >();
+
+  for (const r of results) {
+    const userAnswers = (r.answers as number[]) ?? [];
+    const { fan1Ball, fan2Ball, fan3Ball, totalBall } = calcDtmBalls(
+      userAnswers,
+      correctAnswers
+    );
+    const name = r.user
+      ? `${r.user.lastName} ${r.user.firstName}`.trim()
+      : "Foydalanuvchi";
+    const finishedAt = r.createdAt.toISOString();
+
+    const prev = bestByUser.get(r.userId);
+    if (
+      !prev ||
+      totalBall > prev.totalBall ||
+      (totalBall === prev.totalBall &&
+        new Date(finishedAt).getTime() > new Date(prev.finishedAt).getTime())
+    ) {
+      bestByUser.set(r.userId, {
+        userId: r.userId,
+        name,
+        fan1Ball,
+        fan2Ball,
+        fan3Ball,
+        totalBall,
+        finishedAt,
+      });
+    }
+  }
+
+  const leaderboard = Array.from(bestByUser.values())
+    .sort((a, b) => {
+      if (b.totalBall !== a.totalBall) return b.totalBall - a.totalBall;
+      return (
+        new Date(b.finishedAt).getTime() - new Date(a.finishedAt).getTime()
+      );
+    })
+    .map((item, idx) => ({
+      rank: idx + 1,
+      name: item.name,
+      fan1Ball: item.fan1Ball,
+      fan2Ball: item.fan2Ball,
+      fan3Ball: item.fan3Ball,
+      totalBall: item.totalBall,
+      finishedAt: item.finishedAt,
+    }));
+
+  return leaderboard;
+}
+
+async function getCachedLeaderboard(): Promise<LeaderboardItem[]> {
+  const now = Date.now();
+  if (leaderboardCache && now < leaderboardCache.nextRefreshAt) {
+    return leaderboardCache.data;
+  }
+
+  const data = await buildLeaderboardSnapshot();
+  leaderboardCache = {
+    data,
+    nextRefreshAt: now + LEADERBOARD_CACHE_TTL_MS,
+  };
+  return data;
+}
+
 type Subject = {
   id: number;
   directionId: number;
@@ -1663,67 +1804,7 @@ export async function dtmRoutes(app: FastifyInstance) {
     "/dtm-test/leaderboard",
     { preHandler: [app.authenticate as any] },
     async () => {
-      const correctAnswers = parseJavoblar();
-
-      const results = await prisma.testResult.findMany({
-        where: { totalQuestions: 90 },
-        orderBy: { createdAt: "desc" },
-        take: 50,
-        include: {
-          user: { select: { firstName: true, lastName: true } },
-        },
-      });
-
-      const indexToLetter = (idx: number): string => {
-        if (idx === 0) return "A";
-        if (idx === 1) return "B";
-        if (idx === 2) return "C";
-        return "D";
-      };
-
-      const leaderboard = results.map((r) => {
-        const userAnswers = (r.answers as number[]) ?? [];
-
-        const calcSection = (start: number, count: number, pointsPerQ: number) => {
-          let correct = 0;
-          for (let i = start; i < start + count; i++) {
-            const correctLetter = correctAnswers.get(i + 1);
-            const userLetter =
-              userAnswers[i] !== undefined && userAnswers[i] !== -1
-                ? indexToLetter(userAnswers[i])
-                : null;
-            if (userLetter === correctLetter) correct++;
-          }
-          return { correct, ball: Math.round(correct * pointsPerQ * 10) / 10 };
-        };
-
-        const fan1 = calcSection(0, 30, DTM_SCORING.fan1);
-        const fan2 = calcSection(30, 30, DTM_SCORING.fan2);
-        const majOna = calcSection(60, 10, DTM_SCORING.majburiy);
-        const majMat = calcSection(70, 10, DTM_SCORING.majburiy);
-        const majTarix = calcSection(80, 10, DTM_SCORING.majburiy);
-        const majBall = Math.round((majOna.ball + majMat.ball + majTarix.ball) * 10) / 10;
-        const totalBall = Math.round((fan1.ball + fan2.ball + majBall) * 10) / 10;
-
-        const fullName = r.user
-          ? `${r.user.lastName} ${r.user.firstName}`.trim()
-          : "Foydalanuvchi";
-
-        return {
-          rank: 0,
-          name: fullName,
-          fan1Ball: fan1.ball,
-          fan2Ball: fan2.ball,
-          fan3Ball: majBall,
-          totalBall,
-          finishedAt: r.createdAt.toISOString(),
-        };
-      });
-
-      leaderboard.sort((a, b) => b.totalBall - a.totalBall);
-      leaderboard.forEach((item, idx) => (item.rank = idx + 1));
-
-      return leaderboard;
+      return getCachedLeaderboard();
     }
   );
 
